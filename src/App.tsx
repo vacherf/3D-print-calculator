@@ -1,14 +1,16 @@
-import { Printer, RotateCcw } from "lucide-react"
+import { Moon, Printer, RotateCcw, Sun } from "lucide-react"
 
 import { CalculatorForm } from "@/components/CalculatorForm"
 import { CostSummary } from "@/components/CostSummary"
 import { PrintSummary } from "@/components/PrintSummary"
 import { Button } from "@/components/ui/button"
 import { useCalculator } from "@/hooks/useCalculator"
+import { useTheme } from "@/hooks/useTheme"
 
 export default function App() {
   const calculator = useCalculator()
   const { state, breakdown } = calculator
+  const { theme, toggleTheme } = useTheme()
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-muted/40 to-background">
@@ -28,10 +30,33 @@ export default function App() {
               </p>
             </div>
           </div>
-          <Button variant="outline" onClick={calculator.reset}>
-            <RotateCcw />
-            Réinitialiser
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              aria-label={
+                theme === "dark"
+                  ? "Passer en thème clair"
+                  : "Passer en thème sombre"
+              }
+              title={
+                theme === "dark"
+                  ? "Passer en thème clair"
+                  : "Passer en thème sombre"
+              }
+            >
+              {theme === "dark" ? (
+                <Sun className="size-5" />
+              ) : (
+                <Moon className="size-5" />
+              )}
+            </Button>
+            <Button variant="outline" onClick={calculator.reset}>
+              <RotateCcw />
+              Réinitialiser
+            </Button>
+          </div>
         </header>
 
         {/* Corps : formulaire + récapitulatif (masqués en impression) */}

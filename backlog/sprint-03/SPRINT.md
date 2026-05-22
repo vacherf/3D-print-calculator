@@ -18,7 +18,7 @@ Ce sprint a trois axes complémentaires :
 | Story | Titre | Points | Priorité | Statut |
 |-------|-------|:------:|----------|--------|
 | STORY-007 | Protection contre les erreurs inattendues (ErrorBoundary) | 3 | Haute | ✅ Terminé |
-| STORY-008 | Bascule thème clair / sombre | 3 | Moyenne | 🔜 À faire |
+| STORY-008 | Bascule thème clair / sombre | 3 | Moyenne | ✅ Terminé |
 | STORY-009a | Infrastructure i18n + langues français et anglais | 5 | Moyenne | 🔜 À faire |
 
 **Charge totale : 11 points** — dans la vélocité habituelle (10–11 pts par sprint).
