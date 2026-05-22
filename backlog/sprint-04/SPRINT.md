@@ -13,8 +13,9 @@ STORY-009b (traductions ES/DE) a été reportée ici lors du découpage de STORY
 | Story | Titre | Points | Priorité | Statut |
 |-------|-------|:------:|----------|--------|
 | STORY-009b | Traductions espagnol et allemand (i18n) | 3 | Moyenne | 📋 Backlog |
+| STORY-010 | Sélecteur de langue compact : drapeau et acronyme | 2 | Moyenne | ✅ Terminé |
 
-**Charge connue à ce stade : 3 points.** Les stories restantes seront sélectionnées depuis `backlog/backlog.md` lors de la planification.
+**Charge connue à ce stade : 5 points.** Les stories restantes seront sélectionnées depuis `backlog/backlog.md` lors de la planification.
 
 ## Note
 

@@ -26,9 +26,11 @@ export const SUPPORTED_LOCALES: ReadonlyArray<{
   code: Locale
   label: string
   labelNative: string
+  /** Code pays ISO 3166-1 alpha-2 du drapeau associé à la langue (ex. "GB" pour l'anglais). */
+  country: string
 }> = [
-  { code: "fr", label: "Français", labelNative: "Français" },
-  { code: "en", label: "English", labelNative: "English" },
+  { code: "fr", label: "Français", labelNative: "Français", country: "FR" },
+  { code: "en", label: "English", labelNative: "English", country: "GB" },
 ] as const
 
 /** Dictionnaires indexés par code de langue. */
