@@ -4,9 +4,9 @@
 
 ## En une phrase
 
-Application web **locale** qui estime le **coût de revient d'une impression 3D** (filament + électricité, marché français), avec import d'un fichier STL pour préremplir la matière/durée et sélection de l'imprimante pour la puissance.
+Application web qui estime le **coût de revient d'une impression 3D** (filament + électricité, marché français), avec import d'un fichier STL pour préremplir la matière/durée et sélection de l'imprimante pour la puissance.
 
-- **Cible** : hobbyiste / usage personnel. Outil lancé en local, pas d'hébergement public prévu.
+- **Cible** : hobbyiste / usage personnel. Utilisable en local (`npm run dev`) ou via l'URL GitHub Pages : **https://vacherf.github.io/3D-print-calculator/**
 - **Langue** : tout en **français** (UI, commentaires, docs). Marché France, devise EUR.
 
 ## Stack
@@ -20,14 +20,14 @@ npm run dev        # serveur de dev (Vite, HMR) — souvent déjà lancé, ne pa
 npm run build      # tsc -b && vite build
 npm run preview    # prévisualiser le build
 npx tsc -b --noEmit  # typecheck seul (à faire avant de clore une story)
-npm run lint       # ESLint — config en cours de mise en place (STORY-003)
+npm run lint       # ESLint (config flat eslint.config.js — opérationnel)
 ```
 
 ## Architecture
 
 Séparation nette des responsabilités :
 
-- **`src/lib/`** — logique métier **pure** (testable, sans React) : `calculator.ts` (moteur de coût), `stl.ts` (parseur + géométrie), `filaments.ts`, `printers.ts`, `electricity.ts`, `format.ts`.
+- **`src/lib/`** — logique métier **pure** (testable, sans React) : `calculator.ts` (moteur de coût), `stl.ts` (parseur + géométrie), `filaments.ts`, `printers.ts`, `electricity.ts`, `format.ts`, `persistence.ts` (lecture/écriture `localStorage`, clé versionnée `print3d-calc:v1`).
 - **`src/hooks/useCalculator.ts`** — état global de la saisie + dérivation du calcul.
 - **`src/components/`** — UI. `ui/` = primitives shadcn ; ne pas y mettre de logique métier.
 

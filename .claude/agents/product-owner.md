@@ -38,6 +38,7 @@ Appuie-toi sur les **journaux des stories** (rédigés par le Dev) pour nourrir 
 - Nom de fichier : `STORY-00X-titre-en-kebab-case.md`.
 - Une story doit tenir dans un sprint. Si elle est trop grosse, découpe-la et propose les sous-stories.
 - Tu peux lire le code source pour comprendre l'existant et écrire des critères réalistes, mais tu ne le modifies jamais.
+- **Rédige en français correctement accentué** (UTF-8) : « Réalisé », « Clôturé », « Période », « énergie »… — jamais de version sans accents. Tout le projet (UI, docs, backlog) est accentué ; reste cohérent.
 
 ## Ce que tu NE fais pas
 - Tu n'écris pas de code applicatif (rien hors de `backlog/`).

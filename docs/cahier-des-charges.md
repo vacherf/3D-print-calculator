@@ -121,9 +121,9 @@ Process agile léger :
 
 ## 9. Roadmap (instantané au 2026-05-22)
 
-- **Sprint 01** (en cours) — Fiabiliser l'estimation d'entrée : ✅ import STL, ✅ sélection imprimante, 🔜 config ESLint.
-- **Sprint 02** (planifié) — Confort, restitution & accès : persistance de la saisie (`localStorage`), récapitulatif imprimable, déploiement GitHub Pages (commodité d'accès perso).
-- **Qualité (transverse)** — tests automatisés Vitest sur la logique pure (`calculator.ts`, `stl.ts`) ; à venir : ErrorBoundary, config ESLint, process bug/hotfix.
+- **Sprint 01** ✅ — Fiabiliser l'estimation d'entrée : import STL, sélection d'imprimante, configuration ESLint. Clôturé le 2026-05-22.
+- **Sprint 02** ✅ — Confort, restitution & accès : persistance de la saisie (`localStorage`), récapitulatif imprimable (`window.print()` + `@media print`), déploiement GitHub Pages. Clôturé le 2026-05-22. Application accessible sur https://vacherf.github.io/3D-print-calculator/
+- **Sprint 03 (éventuel)** — Qualité et robustesse : ErrorBoundary, tests unitaires sur `persistence.ts`, process bug/hotfix.
 - **Backlog** — paramètres STL avancés, bibliothèque de filaments personnalisée, thème clair/sombre, aperçu 3D… (voir `backlog/backlog.md`).
 
 ## 10. Glossaire

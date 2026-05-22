@@ -5,6 +5,8 @@ fonction du type de filament, de la quantité utilisée et du **coût de
 l'électricité en France**. Construite avec **Vite + React + TypeScript** et
 **[shadcn/ui](https://ui.shadcn.com/)** (Tailwind CSS v4).
 
+**Application en ligne** : https://vacherf.github.io/3D-print-calculator/
+
 ## Fonctionnalités
 
 - **Import d'un fichier STL** (ASCII ou binaire) par clic ou glisser-déposer :
@@ -23,6 +25,14 @@ l'électricité en France**. Construite avec **Vite + React + TypeScript** et
 - Taux de gâche (impressions ratées, supports) et marge commerciale optionnelle
   pour obtenir un prix de vente conseillé.
 - Récapitulatif détaillé en temps réel.
+- **Persistance automatique de la saisie** : les valeurs sont conservées dans le
+  `localStorage` du navigateur (clé `print3d-calc:v1`) et restaurées au
+  rechargement. Le bouton « Réinitialiser » purge le stockage et revient aux
+  valeurs par défaut.
+- **Export / impression** : bouton « Imprimer / Exporter » qui déclenche
+  `window.print()`. L'interface applicative est masquée ; un document structuré
+  (paramètres + détail du coût + date de génération) s'affiche à la place,
+  formaté A4 portrait en noir & blanc — exportable en PDF via le navigateur.
 
 ## Démarrage
 
@@ -42,7 +52,8 @@ src/
 ├── App.tsx                  # Composition de la page
 ├── components/
 │   ├── CalculatorForm.tsx   # Formulaire de saisie
-│   ├── CostSummary.tsx      # Récapitulatif chiffré
+│   ├── CostSummary.tsx      # Récapitulatif chiffré (+ bouton Imprimer)
+│   ├── PrintSummary.tsx     # Document réservé à l'impression (@media print)
 │   ├── StlImporter.tsx      # Import & analyse d'un fichier STL
 │   ├── FilamentSelector.tsx # Sélecteur de filament
 │   ├── PrinterSelector.tsx  # Sélecteur d'imprimante (par marque)
@@ -57,6 +68,7 @@ src/
     ├── stl.test.ts          # Tests du parseur STL
     ├── electricity.ts       # Tarifs électricité France
     ├── filaments.ts         # Référentiel des filaments
+    ├── persistence.ts       # Lecture/écriture localStorage (clé print3d-calc:v1)
     ├── printers.ts          # Référentiel des imprimantes
     ├── format.ts            # Formatage (€, kWh) à la française
     └── utils.ts             # cn() (classes Tailwind)
@@ -65,6 +77,29 @@ src/
 Documentation et organisation : [`CLAUDE.md`](CLAUDE.md) (orientation rapide),
 [`docs/cahier-des-charges.md`](docs/cahier-des-charges.md) (spécification) et
 [`backlog/`](backlog/) (sprints & user stories).
+
+## Déploiement
+
+L'application est publiée automatiquement sur **GitHub Pages** à chaque push sur
+la branche `main` via le workflow `.github/workflows/deploy.yml` (GitHub Actions).
+
+**URL** : https://vacherf.github.io/3D-print-calculator/
+
+### Fonctionnement du workflow
+
+1. Déclencheur : push sur `main` ou lancement manuel (`workflow_dispatch`).
+2. Job `build` : `npm ci` → `npm run build` → upload de `dist/` comme artefact Pages.
+3. Job `deploy` : publication de l'artefact via `actions/deploy-pages`.
+
+### Rôle de `base` dans `vite.config.ts`
+
+GitHub Pages sert le site sous un sous-chemin (`/3D-print-calculator/`). La
+propriété `base: '/3D-print-calculator/'` dans `vite.config.ts` préfixe tous
+les chemins d'assets générés par Vite pour éviter les erreurs 404.
+
+> **Prérequis** : le repo doit être **public** pour que GitHub Pages soit
+> disponible sur un plan GitHub gratuit (Settings → Pages → Source = GitHub
+> Actions).
 
 ## Méthode de calcul
 
