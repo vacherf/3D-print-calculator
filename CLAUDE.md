@@ -60,9 +60,10 @@ Détail du modèle STL (masse via « coque + remplissage », durée via débit v
 
 ## Organisation du travail
 
-Process agile léger : **sprints de 2 semaines**, **user stories** dans `backlog/`, deux rôles incarnés par des sous-agents Claude Code (`.claude/agents/`) :
+Process agile léger : **sprints de 2 semaines**, **user stories** dans `backlog/`, quatre rôles incarnés par des sous-agents Claude Code (`.claude/agents/`) :
 - **`product-owner`** — rédige/priorise les stories, planifie les sprints (ne code pas).
 - **`developer`** — implémente les stories, vérifie, met à jour les statuts.
 - **`documentation`** — maintient la doc (README, CLAUDE.md, docs/, JSDoc) en phase avec le code.
+- **`testeur`** — vérifie la qualité via tests Vitest (`src/lib/`), lance la chaîne complète et signale les bugs (ne modifie pas le code applicatif).
 
 Voir **`backlog/README.md`** pour le process, la Definition of Done et l'avancement des sprints.

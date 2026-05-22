@@ -115,10 +115,11 @@ Process agile léger :
 
 - **Sprints de 2 semaines**, avec un objectif unique chacun.
 - **User stories** au format `backlog/template-story.md`, suivies dans `backlog/sprint-XX/`.
-- Trois **rôles** incarnés par des sous-agents Claude Code (`.claude/agents/`) :
+- Quatre **rôles** incarnés par des sous-agents Claude Code (`.claude/agents/`) :
   - **Product Owner** (`product-owner`) — rédige/priorise les stories, planifie (ne code pas).
   - **Développeur** (`developer`) — implémente, vérifie, met à jour les statuts.
   - **Rédacteur technique** (`documentation`) — maintient la doc (README, CLAUDE.md, docs/, JSDoc) en phase avec le code (ne décide pas du produit).
+  - **Testeur / QA** (`testeur`) — écrit et étend les tests Vitest de `src/lib/`, lance la chaîne de vérification complète, signale les bugs au développeur et au PO (ne modifie pas la logique applicative).
 - **Definition of Done** et cycle de vie des stories : voir `backlog/README.md`.
 
 ## 9. Roadmap (instantané au 2026-05-22)

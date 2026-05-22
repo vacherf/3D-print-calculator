@@ -9,12 +9,14 @@ Ce dossier organise le travail en **stories** regroupées en **sprints**, avec d
 | **Product Owner** | `product-owner` | Rédige et priorise les stories, définit les critères d'acceptation, planifie les sprints. Ne code pas. |
 | **Développeur** | `developer` | Implémente les stories, vérifie (typecheck/build), met à jour leur statut. |
 | **Rédacteur technique** | `documentation` | Maintient la documentation (README, CLAUDE.md, docs/, JSDoc) en phase avec le code. Ne décide pas du produit. |
+| **Testeur / QA** | `testeur` | Écrit et étend les tests unitaires (Vitest) de la logique pure (`src/lib/`), lance toute la chaîne de vérification (`test:run`, `tsc`, `lint`, `build`) et produit un rapport. Ne modifie pas la logique applicative ni le backlog : signale les bugs au développeur et au PO. |
 
 ### Comment les invoquer
 - « **PO**, écris une story pour permettre l'export du devis en PDF. »
 - « **PO**, planifie le sprint 2 avec les stories prioritaires du backlog. »
 - « **Dev**, implémente la STORY-003. »
 - « **Doc**, mets à jour la documentation après la STORY-002. »
+- « **Testeur**, vérifie la couverture de `src/lib/` et lance toute la chaîne de vérification. »
 
 Claude délègue alors au bon sous-agent (défini dans `.claude/agents/`).
 
