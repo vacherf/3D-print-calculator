@@ -1,7 +1,7 @@
-# Sprint 03 — Planifié
+# Sprint 03 — 🚧 en cours
 
 - **Période** : 2026-05-23 → 2026-06-05 (2 semaines)
-- **Statut** : Planifié
+- **Statut** : 🚧 En cours
 - **Cible produit** : hobbyistes / usage personnel.
 
 ## Objectif du sprint
@@ -17,7 +17,7 @@ Ce sprint a trois axes complémentaires :
 
 | Story | Titre | Points | Priorité | Statut |
 |-------|-------|:------:|----------|--------|
-| STORY-007 | Protection contre les erreurs inattendues (ErrorBoundary) | 3 | Haute | 🔜 À faire |
+| STORY-007 | Protection contre les erreurs inattendues (ErrorBoundary) | 3 | Haute | ✅ Terminé |
 | STORY-008 | Bascule thème clair / sombre | 3 | Moyenne | 🔜 À faire |
 | STORY-009a | Infrastructure i18n + langues français et anglais | 5 | Moyenne | 🔜 À faire |
 
