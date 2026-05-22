@@ -35,10 +35,27 @@ Le PO les détaille (fichier dédié au format `template-story.md`) au moment de
 
 Initiative transverse pour détecter et corriger les erreurs rapidement, menée progressivement :
 
-1. ✅ **Tests automatisés (Vitest)** — suite sur `calculator.ts` et `stl.ts` (15 tests). Lancer `npm test` (watch) ou `npm run test:run`.
-2. 🔜 **ErrorBoundary + garde-fous UI** — éviter l'écran blanc, message clair sur erreur d'exécution. Planifié en sprint-03 (STORY-007).
-3. 📋 **Tests automatisés de la couche de persistance** — couvrir `persistence.ts` avec Vitest (mock `localStorage`). Piste retirée du sprint-03 faute de priorité ; à reprendre quand la couche persistance évoluera. _Note de STORY-004 : « Pas de test unitaire automatisé pour `persistence.ts` — nécessiterait un mock de `localStorage` dans l'environnement de test. »_
+1. ✅ **Tests automatisés (Vitest) — logique pure `src/lib/`** — 178 tests verts sur 9 fichiers (calculator, stl, format, formatDuration, persistence, electricity, filaments, printers, locales/index). Lancer `npm test` (watch) ou `npm run test:run`. _(Mis à jour 2026-05-22 : voir « Passe QA transverse » ci-dessous.)_
+2. ✅ **ErrorBoundary + garde-fous UI** — éviter l'écran blanc, message clair sur erreur d'exécution. Livré en sprint-03 (STORY-007).
+3. ✅ **Tests automatisés de la couche de persistance** — `persistence.ts` couvert par Vitest (JSON malformé, valeurs limites des champs numériques). _(Réalisé lors de la deuxième passe QA transverse du 2026-05-22.)_
 4. 📋 **Process bug / hotfix** — gabarit de bug (`backlog/template-bug.md`) et convention `backlog/hotfixes/` pour les corrections hors sprint. Piste retirée du sprint-03 ; à traiter si un bug bloquant survient avant d'être formalisé.
+
+### Passe QA transverse — 2026-05-22 (hors sprint)
+
+Deux sessions de tests menées par l'agent `testeur` après la clôture du sprint-04, sans story planifiée :
+
+- **Commit a43b219** — première passe : mise en place de la suite Vitest sur `src/lib/`, 97 tests sur 8 fichiers.
+- **Commit c879f6a** — deuxième passe : comblement des trous de couverture. +81 tests (dont un fichier entièrement nouveau `formatDuration.test.ts`, +53 cas sur `formatDuration`/`formatDate` sur les 4 locales, et +13 cas sur `persistence.ts`). **Total : 178 tests verts.**
+- Chaîne complète validée : `test:run` OK, `tsc -b --noEmit` OK, `lint` OK, `build` OK.
+- **Aucun bug bloquant détecté.**
+
+**Observations transmises au PO pour arbitrage :**
+
+- **`electricityPricePerKwh = 0` rejeté à la persistance** : la validation `isFinitePositive` (strictement > 0) empêche de sauvegarder un prix d'électricité nul. Comportement cohérent métier (un prix nul n'a pas de sens dans le contexte français), mais non documenté au cahier des charges. Piste : clarifier dans `docs/cahier-des-charges.md` que les prix sont strictement positifs, ou exposer un message d'erreur plus explicite dans l'UI. _Priorité basse — non bloquant._
+
+**Piste future tracée — tests des couches React (`src/hooks/`, `src/components/`, `src/contexts/`) :**
+
+Les hooks, composants (dont `ErrorBoundary`) et le contexte i18n ne sont pas couverts par des tests automatisés. Les tester nécessiterait un environnement `jsdom` ou `happy-dom` avec `@testing-library/react`. À envisager si l'application gagne en complexité ou si des régressions UI sont constatées. _Priorité basse actuellement : la logique métier pure est entièrement couverte et représente le cœur du risque qualité._
 
 ## Priorité moyenne
 
