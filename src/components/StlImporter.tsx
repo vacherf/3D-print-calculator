@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { useI18nContext } from "@/contexts/i18n"
 import { getFilament } from "@/lib/filaments"
 import {
   analyzeStl,
@@ -21,13 +22,8 @@ import type { UseCalculator } from "@/hooks/useCalculator"
 
 const DEFAULT_INFILL = 15
 
-/** Formate un nombre à la française avec un nombre de décimales fixe. */
-function fr(value: number, digits = 1): string {
-  return value.toLocaleString("fr-FR", {
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
-  })
-}
+/** Correspondance locale courte → BCP-47 (pour les métriques STL). */
+const LOCALE_BCP47 = { fr: "fr-FR", en: "en-US" } as const
 
 /**
  * Importe un fichier STL, en analyse la géométrie et pré-remplit la quantité
@@ -35,6 +31,7 @@ function fr(value: number, digits = 1): string {
  */
 export function StlImporter({ calculator }: { calculator: UseCalculator }) {
   const { state, setField } = calculator
+  const { t, locale } = useI18nContext()
   const inputRef = useRef<HTMLInputElement>(null)
 
   const [fileName, setFileName] = useState<string | null>(null)
@@ -43,6 +40,14 @@ export function StlImporter({ calculator }: { calculator: UseCalculator }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [dragging, setDragging] = useState(false)
+
+  /** Formate un nombre selon la locale active avec un nombre de décimales fixe. */
+  function formatNum(value: number, digits = 1): string {
+    return value.toLocaleString(LOCALE_BCP47[locale], {
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    })
+  }
 
   /** Calcule masse + durée et les pousse dans le calculateur. */
   function applyEstimates(result: StlAnalysis, infillPercent: number) {
@@ -74,7 +79,7 @@ export function StlImporter({ calculator }: { calculator: UseCalculator }) {
       setError(
         err instanceof StlParseError
           ? err.message
-          : "Impossible de lire ce fichier STL.",
+          : t.stlImporter.errorGeneric,
       )
     } finally {
       setLoading(false)
@@ -92,12 +97,9 @@ export function StlImporter({ calculator }: { calculator: UseCalculator }) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Box className="size-5 text-primary" />
-          Importer un fichier STL
+          {t.stlImporter.cardTitle}
         </CardTitle>
-        <CardDescription>
-          Analyse le modèle 3D pour estimer automatiquement la matière et la
-          durée. Sélectionnez d'abord votre filament ci-dessous.
-        </CardDescription>
+        <CardDescription>{t.stlImporter.cardDescription}</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
         {/* Zone de dépôt / sélection */}
@@ -127,10 +129,10 @@ export function StlImporter({ calculator }: { calculator: UseCalculator }) {
             <FileUp className="text-muted-foreground size-6" />
           )}
           <span className="text-sm font-medium">
-            {fileName ?? "Cliquez ou glissez un fichier .STL ici"}
+            {fileName ?? t.stlImporter.dropZoneIdle}
           </span>
           <span className="text-muted-foreground text-xs">
-            Formats STL ASCII et binaire pris en charge
+            {t.stlImporter.dropZoneFormats}
           </span>
         </button>
         <input
@@ -156,31 +158,34 @@ export function StlImporter({ calculator }: { calculator: UseCalculator }) {
           <>
             {/* Géométrie mesurée */}
             <dl className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
-              <Metric label="Dimensions">
-                {fr(analysis.bounds.x, 0)} × {fr(analysis.bounds.y, 0)} ×{" "}
-                {fr(analysis.bounds.z, 0)} mm
+              <Metric label={t.stlImporter.metricDimensions}>
+                {formatNum(analysis.bounds.x, 0)} ×{" "}
+                {formatNum(analysis.bounds.y, 0)} ×{" "}
+                {formatNum(analysis.bounds.z, 0)} mm
               </Metric>
-              <Metric label="Volume">{fr(analysis.volumeCm3)} cm³</Metric>
-              <Metric label="Surface">{fr(analysis.surfaceAreaCm2)} cm²</Metric>
-              <Metric label="Triangles">
-                {analysis.triangleCount.toLocaleString("fr-FR")}
+              <Metric label={t.stlImporter.metricVolume}>
+                {formatNum(analysis.volumeCm3)} cm³
+              </Metric>
+              <Metric label={t.stlImporter.metricSurface}>
+                {formatNum(analysis.surfaceAreaCm2)} cm²
+              </Metric>
+              <Metric label={t.stlImporter.metricTriangles}>
+                {analysis.triangleCount.toLocaleString(LOCALE_BCP47[locale])}
               </Metric>
             </dl>
 
             <NumberField
-              label="Taux de remplissage estimé"
+              label={t.stlImporter.infillLabel}
               value={infill}
               onChange={handleInfillChange}
               unit="%"
               step={5}
               max={100}
-              hint="Ajustez selon votre réglage de slicer : la matière et la durée sont recalculées."
+              hint={t.stlImporter.infillHint}
             />
 
             <p className="text-muted-foreground text-xs leading-relaxed">
-              Estimation indicative (modèle coque + remplissage). Supports, purge
-              et réglages fins ne sont pas pris en compte — vérifiez avec votre
-              slicer pour un devis précis.
+              {t.stlImporter.infillNote}
             </p>
           </>
         ) : null}

@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { useI18nContext } from "@/contexts/i18n"
 import type { CostBreakdown } from "@/lib/calculator"
 import { formatEuros, formatKwh } from "@/lib/format"
 
@@ -47,6 +48,7 @@ function handlePrint() {
 
 /** Récapitulatif chiffré du coût de revient et du prix de vente conseillé. */
 export function CostSummary({ breakdown }: { breakdown: CostBreakdown }) {
+  const { t, locale } = useI18nContext()
   const hasMargin = breakdown.marginAmount > 0
 
   return (
@@ -54,58 +56,58 @@ export function CostSummary({ breakdown }: { breakdown: CostBreakdown }) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Receipt className="size-5 text-primary" />
-          Coût de revient
+          {t.costSummary.cardTitle}
         </CardTitle>
       </CardHeader>
       <CardContent className="grid gap-4">
         {/* Montant principal mis en avant */}
         <div className="bg-primary/5 rounded-lg border border-primary/20 p-4 text-center">
           <p className="text-muted-foreground text-xs uppercase tracking-wide">
-            Coût total de l'impression
+            {t.costSummary.totalLabel}
           </p>
           <p className="text-primary mt-1 text-4xl font-bold tabular-nums">
-            {formatEuros(breakdown.costPrice)}
+            {formatEuros(breakdown.costPrice, locale)}
           </p>
         </div>
 
         <div className="grid gap-3">
           <Line
-            label="Matière (filament)"
-            value={formatEuros(breakdown.filamentCost)}
+            label={t.costSummary.filamentLine}
+            value={formatEuros(breakdown.filamentCost, locale)}
           />
           <Line
-            label="Électricité"
-            detail={formatKwh(breakdown.energyKwh)}
-            value={formatEuros(breakdown.electricityCost)}
+            label={t.costSummary.electricityLine}
+            detail={formatKwh(breakdown.energyKwh, locale)}
+            value={formatEuros(breakdown.electricityCost, locale)}
           />
           <Line
-            label="Gâche / réimpressions"
-            value={formatEuros(breakdown.wasteCost)}
+            label={t.costSummary.wasteLine}
+            value={formatEuros(breakdown.wasteCost, locale)}
           />
         </div>
 
         <Separator />
 
         <Line
-          label="Coût de revient"
-          value={formatEuros(breakdown.costPrice)}
+          label={t.costSummary.costPriceLine}
+          value={formatEuros(breakdown.costPrice, locale)}
           emphasis
         />
 
         {hasMargin ? (
           <>
             <Line
-              label="Marge commerciale"
-              value={formatEuros(breakdown.marginAmount)}
+              label={t.costSummary.marginLine}
+              value={formatEuros(breakdown.marginAmount, locale)}
             />
             <Separator />
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-2">
-                <p className="font-medium">Prix de vente conseillé</p>
-                <Badge variant="secondary">avec marge</Badge>
+                <p className="font-medium">{t.costSummary.sellingPriceLine}</p>
+                <Badge variant="secondary">{t.costSummary.sellingPriceBadge}</Badge>
               </div>
               <p className="text-primary text-lg font-bold tabular-nums">
-                {formatEuros(breakdown.sellingPrice)}
+                {formatEuros(breakdown.sellingPrice, locale)}
               </p>
             </div>
           </>
@@ -118,10 +120,10 @@ export function CostSummary({ breakdown }: { breakdown: CostBreakdown }) {
           variant="outline"
           className="w-full"
           onClick={handlePrint}
-          aria-label="Imprimer ou exporter le récapitulatif en PDF"
+          aria-label={t.costSummary.printButtonAriaLabel}
         >
           <Printer />
-          Imprimer / Exporter
+          {t.costSummary.printButton}
         </Button>
       </CardContent>
     </Card>

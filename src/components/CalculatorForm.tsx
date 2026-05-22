@@ -11,12 +11,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { useI18nContext } from "@/contexts/i18n"
 import { ELECTRICITY_TARIFFS } from "@/lib/electricity"
 import type { UseCalculator } from "@/hooks/useCalculator"
 
 /** Formulaire de saisie : filament, impression, paramètres avancés. */
 export function CalculatorForm({ calculator }: { calculator: UseCalculator }) {
   const { state, setField, selectFilament, selectPrinter } = calculator
+  const { t } = useI18nContext()
 
   return (
     <div className="grid gap-6">
@@ -28,11 +30,9 @@ export function CalculatorForm({ calculator }: { calculator: UseCalculator }) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Boxes className="size-5 text-primary" />
-            Filament
+            {t.filamentCard.cardTitle}
           </CardTitle>
-          <CardDescription>
-            Le type de matière et la quantité utilisée pour l'impression.
-          </CardDescription>
+          <CardDescription>{t.filamentCard.cardDescription}</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 sm:grid-cols-2">
           <FilamentSelector
@@ -40,20 +40,20 @@ export function CalculatorForm({ calculator }: { calculator: UseCalculator }) {
             onChange={selectFilament}
           />
           <NumberField
-            label="Prix de la bobine"
+            label={t.filamentCard.priceLabel}
             value={state.pricePerKg}
             onChange={(v) => setField("pricePerKg", v)}
-            unit="€/kg"
+            unit={t.filamentCard.priceUnit}
             step={0.5}
-            hint="Prérempli avec un prix moyen — ajustez selon votre bobine."
+            hint={t.filamentCard.priceHint}
           />
           <NumberField
-            label="Quantité de filament"
+            label={t.filamentCard.quantityLabel}
             value={state.filamentGrams}
             onChange={(v) => setField("filamentGrams", v)}
-            unit="g"
+            unit={t.filamentCard.quantityUnit}
             step={1}
-            hint="Masse indiquée par votre logiciel de découpe (slicer)."
+            hint={t.filamentCard.quantityHint}
           />
         </CardContent>
       </Card>
@@ -63,40 +63,38 @@ export function CalculatorForm({ calculator }: { calculator: UseCalculator }) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Plug className="size-5 text-primary" />
-            Impression & électricité
+            {t.electricityCard.cardTitle}
           </CardTitle>
-          <CardDescription>
-            Durée et consommation pour estimer le coût de l'énergie (France).
-          </CardDescription>
+          <CardDescription>{t.electricityCard.cardDescription}</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 sm:grid-cols-2">
           <NumberField
-            label="Durée d'impression"
+            label={t.electricityCard.durationLabel}
             value={state.printHours}
             onChange={(v) => setField("printHours", v)}
-            unit="h"
+            unit={t.electricityCard.durationUnit}
             step={0.25}
-            hint="Temps estimé par le slicer."
+            hint={t.electricityCard.durationHint}
           />
           <PrinterSelector value={state.printerId} onChange={selectPrinter} />
           {state.printerId === "custom" ? (
             <NumberField
-              label="Puissance imprimante"
+              label={t.electricityCard.printerPowerLabel}
               value={state.printerPowerW}
               onChange={(v) => setField("printerPowerW", v)}
-              unit="W"
+              unit={t.electricityCard.printerPowerUnit}
               step={10}
-              hint="Puissance moyenne mesurée au wattmètre pendant l'impression."
+              hint={t.electricityCard.printerPowerHint}
             />
           ) : null}
           <div className="sm:col-span-2">
             <NumberField
-              label="Prix de l'électricité"
+              label={t.electricityCard.electricityPriceLabel}
               value={state.electricityPricePerKwh}
               onChange={(v) => setField("electricityPricePerKwh", v)}
-              unit="€/kWh"
+              unit={t.electricityCard.electricityPriceUnit}
               step={0.001}
-              hint="Tarif Bleu EDF (août 2025). Repères ci-dessous."
+              hint={t.electricityCard.electricityPriceHint}
             />
             <div className="mt-2 flex flex-wrap gap-2">
               {ELECTRICITY_TARIFFS.map((tariff) => (
@@ -108,6 +106,7 @@ export function CalculatorForm({ calculator }: { calculator: UseCalculator }) {
                   }
                   className="border-input hover:bg-accent rounded-md border px-2.5 py-1 text-xs transition-colors"
                 >
+                  {/* Les libellés des tarifs EDF ne sont pas traduits — noms de référence invariants */}
                   {tariff.label} · {tariff.pricePerKwh.toFixed(4)} €
                 </button>
               ))}
@@ -121,28 +120,26 @@ export function CalculatorForm({ calculator }: { calculator: UseCalculator }) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <SlidersHorizontal className="size-5 text-primary" />
-            Paramètres avancés
+            {t.advancedCard.cardTitle}
           </CardTitle>
-          <CardDescription>
-            Gâche (impressions ratées) et marge commerciale optionnelle.
-          </CardDescription>
+          <CardDescription>{t.advancedCard.cardDescription}</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 sm:grid-cols-2">
           <NumberField
-            label="Taux de gâche"
+            label={t.advancedCard.wasteLabel}
             value={state.wastePercent}
             onChange={(v) => setField("wastePercent", v)}
-            unit="%"
+            unit={t.advancedCard.wasteUnit}
             step={1}
-            hint="Supports, ratés, purge… appliqué à la matière et l'énergie."
+            hint={t.advancedCard.wasteHint}
           />
           <NumberField
-            label="Marge commerciale"
+            label={t.advancedCard.marginLabel}
             value={state.marginPercent}
             onChange={(v) => setField("marginPercent", v)}
-            unit="%"
+            unit={t.advancedCard.marginUnit}
             step={5}
-            hint="Pour obtenir un prix de vente conseillé (0 = aucune marge)."
+            hint={t.advancedCard.marginHint}
           />
         </CardContent>
       </Card>

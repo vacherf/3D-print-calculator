@@ -2,8 +2,10 @@ import { Moon, Printer, RotateCcw, Sun } from "lucide-react"
 
 import { CalculatorForm } from "@/components/CalculatorForm"
 import { CostSummary } from "@/components/CostSummary"
+import { LanguageSelector } from "@/components/LanguageSelector"
 import { PrintSummary } from "@/components/PrintSummary"
 import { Button } from "@/components/ui/button"
+import { useI18nContext } from "@/contexts/i18n"
 import { useCalculator } from "@/hooks/useCalculator"
 import { useTheme } from "@/hooks/useTheme"
 
@@ -11,6 +13,7 @@ export default function App() {
   const calculator = useCalculator()
   const { state, breakdown } = calculator
   const { theme, toggleTheme } = useTheme()
+  const { t, locale, setLocale } = useI18nContext()
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-muted/40 to-background">
@@ -23,27 +26,34 @@ export default function App() {
             </div>
             <div>
               <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-                Calculateur d'impression 3D
+                {t.app.title}
               </h1>
               <p className="text-muted-foreground text-sm">
-                Coût de revient : filament + électricité (France)
+                {t.app.subtitle}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {/* Sélecteur de langue */}
+            <LanguageSelector
+              locale={locale}
+              ariaLabel={t.app.languageSelectorLabel}
+              onChange={setLocale}
+            />
+            {/* Bascule thème clair / sombre */}
             <Button
               variant="ghost"
               size="icon"
               onClick={toggleTheme}
               aria-label={
                 theme === "dark"
-                  ? "Passer en thème clair"
-                  : "Passer en thème sombre"
+                  ? t.app.themeToggleToLight
+                  : t.app.themeToggleToDark
               }
               title={
                 theme === "dark"
-                  ? "Passer en thème clair"
-                  : "Passer en thème sombre"
+                  ? t.app.themeToggleToLight
+                  : t.app.themeToggleToDark
               }
             >
               {theme === "dark" ? (
@@ -54,7 +64,7 @@ export default function App() {
             </Button>
             <Button variant="outline" onClick={calculator.reset}>
               <RotateCcw />
-              Réinitialiser
+              {t.app.resetButton}
             </Button>
           </div>
         </header>
@@ -69,11 +79,7 @@ export default function App() {
 
         {/* Pied de page (masqué en impression) */}
         <footer className="text-muted-foreground mt-10 text-center text-xs leading-relaxed print:hidden">
-          <p>
-            Tarifs indicatifs : Tarif Bleu EDF (août 2025) et prix moyens de
-            filament constatés en France en 2025. Modifiez les valeurs pour
-            coller à votre situation réelle.
-          </p>
+          <p>{t.app.footer}</p>
         </footer>
 
         {/* Récapitulatif réservé à l'impression (invisible à l'écran) */}

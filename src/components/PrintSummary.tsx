@@ -5,12 +5,16 @@
  * grâce à la classe `.screen-only` / `.print-only` définie dans index.css.
  * Lors du déclenchement de `window.print()`, seul ce bloc et les éléments
  * `.print-visible` restent affichés.
+ *
+ * Le composant consomme le contexte i18n pour refléter la langue active
+ * dans le document imprimé.
  */
 
 import type { CostBreakdown } from "@/lib/calculator"
 import { formatEuros, formatKwh } from "@/lib/format"
 import { getFilament, type FilamentId } from "@/lib/filaments"
 import { getPrinter, type PrinterId } from "@/lib/printers"
+import { useI18nContext } from "@/contexts/i18n"
 
 interface PrintSummaryProps {
   filamentId: FilamentId
@@ -48,27 +52,6 @@ function PrintLine({
   )
 }
 
-/** Formate une durée en heures en texte lisible (ex. "1 h 30 min"). */
-function formatDuree(heures: number): string {
-  if (!Number.isFinite(heures) || heures <= 0) return "0 h"
-  const h = Math.floor(heures)
-  const min = Math.round((heures - h) * 60)
-  if (min === 0) return `${h} h`
-  if (h === 0) return `${min} min`
-  return `${h} h ${min} min`
-}
-
-/** Formate une date en français (ex. "22 mai 2026 à 14:35"). */
-function formatDateFr(date: Date): string {
-  return date.toLocaleString("fr-FR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  })
-}
-
 /**
  * Section du document réservée à l'impression.
  * Masquée à l'écran, affichée lors de `window.print()`.
@@ -85,50 +68,57 @@ export function PrintSummary({
   marginPercent,
   breakdown,
 }: PrintSummaryProps) {
+  const { t, locale } = useI18nContext()
   const filament = getFilament(filamentId)
   const printer = getPrinter(printerId)
   const hasMargin = breakdown.marginAmount > 0
-  const generatedAt = formatDateFr(new Date())
+
+  const formattedDate = t.printSummary.formatDate(new Date())
+  const generatedAt = t.printSummary.generatedAt(formattedDate)
 
   return (
     <div id="print-summary" aria-hidden="true">
       {/* En-tête du document imprimé */}
       <div className="print-header">
-        <h1 className="print-title">Récapitulatif d'impression 3D</h1>
-        <p className="print-date">Généré le {generatedAt}</p>
+        <h1 className="print-title">{t.printSummary.documentTitle}</h1>
+        <p className="print-date">{generatedAt}</p>
       </div>
 
       {/* Section paramètres */}
       <section className="print-section">
-        <h2 className="print-section-title">Paramètres de l'impression</h2>
+        <h2 className="print-section-title">{t.printSummary.sectionParams}</h2>
         <table className="print-table">
           <tbody>
             <PrintLine
-              label="Filament"
+              label={t.printSummary.paramFilament}
               value={filament.name}
-              detail={`${filamentGrams} g · ${formatEuros(pricePerKg)}/kg`}
+              detail={`${filamentGrams} g · ${formatEuros(pricePerKg, locale)}/kg`}
             />
             <PrintLine
-              label="Imprimante"
-              value={printer.brand === "Autre" ? printer.name : `${printer.brand} ${printer.name}`}
+              label={t.printSummary.paramPrinter}
+              value={
+                printer.brand === "Autre"
+                  ? printer.name
+                  : `${printer.brand} ${printer.name}`
+              }
               detail={`${printerPowerW} W`}
             />
             <PrintLine
-              label="Durée d'impression"
-              value={formatDuree(printHours)}
+              label={t.printSummary.paramDuration}
+              value={t.printSummary.formatDuration(printHours)}
             />
             <PrintLine
-              label="Tarif électricité"
-              value={`${electricityPricePerKwh.toFixed(4)} €/kWh`}
+              label={t.printSummary.paramElectricity}
+              value={`${electricityPricePerKwh.toFixed(4)} ${t.printSummary.electricityUnit}`}
             />
             <PrintLine
-              label="Taux de gâche"
-              value={`${wastePercent} %`}
+              label={t.printSummary.paramWaste}
+              value={`${wastePercent} ${t.printSummary.wasteUnit}`}
             />
             {hasMargin ? (
               <PrintLine
-                label="Marge commerciale"
-                value={`${marginPercent} %`}
+                label={t.printSummary.paramMargin}
+                value={`${marginPercent} ${t.printSummary.marginUnit}`}
               />
             ) : null}
           </tbody>
@@ -137,36 +127,36 @@ export function PrintSummary({
 
       {/* Section détail du coût */}
       <section className="print-section">
-        <h2 className="print-section-title">Détail du coût</h2>
+        <h2 className="print-section-title">{t.printSummary.sectionCost}</h2>
         <table className="print-table">
           <tbody>
             <PrintLine
-              label="Matière (filament)"
-              value={formatEuros(breakdown.filamentCost)}
+              label={t.printSummary.costFilament}
+              value={formatEuros(breakdown.filamentCost, locale)}
             />
             <PrintLine
-              label="Électricité"
-              value={formatEuros(breakdown.electricityCost)}
-              detail={formatKwh(breakdown.energyKwh)}
+              label={t.printSummary.costElectricity}
+              value={formatEuros(breakdown.electricityCost, locale)}
+              detail={formatKwh(breakdown.energyKwh, locale)}
             />
             <PrintLine
-              label="Gâche / réimpressions"
-              value={formatEuros(breakdown.wasteCost)}
+              label={t.printSummary.costWaste}
+              value={formatEuros(breakdown.wasteCost, locale)}
             />
             <PrintLine
-              label="Coût de revient"
-              value={formatEuros(breakdown.costPrice)}
+              label={t.printSummary.costPrice}
+              value={formatEuros(breakdown.costPrice, locale)}
               bold
             />
             {hasMargin ? (
               <>
                 <PrintLine
-                  label="Marge commerciale"
-                  value={formatEuros(breakdown.marginAmount)}
+                  label={t.printSummary.costMargin}
+                  value={formatEuros(breakdown.marginAmount, locale)}
                 />
                 <PrintLine
-                  label="Prix de vente conseillé"
-                  value={formatEuros(breakdown.sellingPrice)}
+                  label={t.printSummary.sellingPrice}
+                  value={formatEuros(breakdown.sellingPrice, locale)}
                   bold
                 />
               </>
@@ -177,9 +167,7 @@ export function PrintSummary({
 
       {/* Pied de page */}
       <footer className="print-footer">
-        <p>
-          Calcul indicatif — Calculateur d'impression 3D (usage personnel)
-        </p>
+        <p>{t.printSummary.footer}</p>
       </footer>
     </div>
   )
