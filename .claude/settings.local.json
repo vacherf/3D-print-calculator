@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "WebSearch",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(node *)",
+      "Bash(npx tsc *)",
+      "PowerShell(Get-NetTCPConnection *)",
+      "PowerShell(Get-Command *)"
+    ]
+  }
+}
