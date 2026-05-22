@@ -22,8 +22,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-    /* Path alias */
-    "baseUrl": ".",
+    /* Path alias (paths résolu relativement à ce tsconfig — baseUrl déprécié dès TS 7.0) */
     "paths": {
       "@/*": ["./src/*"]
     }
