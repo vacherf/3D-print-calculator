@@ -5,6 +5,9 @@ import { defineConfig } from "vite"
 
 // https://vite.dev/config/
 export default defineConfig({
+  // base pour GitHub Pages : le repo s'appelle "3D-print-calculator",
+  // donc les assets sont servis sous ce chemin de sous-répertoire.
+  base: "/3D-print-calculator/",
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

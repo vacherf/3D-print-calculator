@@ -1,0 +1,64 @@
+# Workflow de déploiement automatique sur GitHub Pages.
+# Se déclenche à chaque push sur main et manuellement via workflow_dispatch.
+# Documentation GitHub : https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
+
+name: Déploiement GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Permissions minimales nécessaires pour Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Un seul déploiement actif à la fois ; annule les runs en attente si un nouveau push arrive.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du dépôt
+        uses: actions/checkout@v4
+
+      - name: Configuration de Node.js
+        uses: actions/setup-node@v4
+        with:
+          # LTS active à date (mai 2026) — cohérente avec l'écosystème Vite 6 / React 19
+          node-version: "22"
+          cache: "npm"
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Build de production
+        run: npm run build
+        # La variable base "/3D-print-calculator/" est déjà définie dans vite.config.ts
+
+      - name: Configuration de GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload de l'artefact Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Déploiement
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Déploiement sur GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

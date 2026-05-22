@@ -1,6 +1,6 @@
 # STORY-006 — Déploiement sur GitHub Pages
 
-- **Statut** : 🔜 À faire
+- **Statut** : 👀 En revue
 - **Sprint** : sprint-02 (planifié)
 - **Estimation** : 3 points
 - **Priorité** : Moyenne
@@ -38,3 +38,51 @@ Confort d'accès personnel : pouvoir ouvrir le calculateur sur son téléphone o
 ## Journal
 
 - 2026-05-22 — Créée par le PO. Demande d'hébergement GitHub Pages ; cible maintenue perso/local (GH Pages = commodité d'accès). Ajoutée comme 3ᵉ story du sprint 02.
+- 2026-05-22 — Démarrage implémentation par le développeur. Lecture story + exploration config existante (vite.config.ts, package.json, main.tsx). Aucun routeur présent, SPA monopage confirmée. Implémentation en cours : (1) base Vite, (2) workflow GitHub Actions.
+- 2026-05-22 — Implémentation terminée, story passée en revue. Détail ci-dessous.
+
+### Journal détaillé — 2026-05-22
+
+**Fait**
+
+1. `vite.config.ts` : ajout de `base: "/3D-print-calculator/"` avant le bloc `plugins`. La clé s'insère proprement dans le `defineConfig` existant sans toucher à la config Tailwind (`@tailwindcss/vite`) ni à l'alias `@/`.
+
+2. `.github/workflows/deploy.yml` : création du workflow de déploiement Pages.
+   - Déclencheurs : `push` sur `main` + `workflow_dispatch` (relance manuelle depuis l'interface GitHub).
+   - Permissions minimales : `contents: read`, `pages: write`, `id-token: write` (requis par les actions officielles Pages).
+   - Concurrence : groupe `pages`, `cancel-in-progress: false` (un run en cours va au bout ; le suivant attend, conforme à la recommandation GitHub pour éviter les déploiements partiels).
+   - Job `build` : checkout → setup-node 22 (LTS stable, cohérent avec Vite 6 / React 19) avec cache npm → `npm ci` → `npm run build` → `configure-pages@v5` → `upload-pages-artifact@v3` (chemin `dist`).
+   - Job `deploy` : dépend de `build`, environnement `github-pages`, step `deploy-pages@v4` exposant l'URL de déploiement.
+
+3. Routing SPA : confirmé qu'il n'y a ni React Router ni aucune lib de routage (`src/main.tsx` monte `<App />` directement, aucun `BrowserRouter`). Pas de fichier `404.html` ni de redirection nécessaire.
+
+**Choix techniques**
+
+- Node 22 (LTS) dans le workflow plutôt que Node 24 (local) : meilleure stabilité en CI, pas de breaking change connu pour cette stack.
+- `cancel-in-progress: false` : deux pushes rapides n'interrompent pas un déploiement en cours (recommandation Pages officielle).
+- Versions d'actions épinglées à la major (`@v4`, `@v5`) pour bénéficier des patches sans verrou trop strict.
+
+**Vérifications effectuées (locales)**
+
+| Commande | Résultat |
+|---|---|
+| `npx tsc -b --noEmit` | Aucune erreur TypeScript |
+| `npm run lint` | Aucune erreur ESLint |
+| `npm run build` | Build OK en 2 s, 3 fichiers dans `dist/` |
+| Lecture `dist/index.html` | Tous les chemins préfixés `/3D-print-calculator/` (favicon, JS, CSS) |
+
+**Critères d'acceptation — état**
+
+- [x] `vite.config.ts` : `base` correcte — aucun asset en 404 attendu.
+- [x] Workflow GitHub Actions créé, reproductible (push main + dispatch manuel).
+- [ ] Projet poussé sur GitHub — HORS PÉRIMÈTRE STORY (action utilisateur, déjà fait selon contexte ; reste à vérifier).
+- [ ] Build publié sur GitHub Pages, URL accessible — À VALIDER après activation Pages + push du workflow.
+- [ ] App fonctionnelle sur l'URL publiée — À VALIDER après déploiement effectif.
+
+**Limites & reste à faire (côté utilisateur)**
+
+1. Activer GitHub Pages : Settings → Pages → Source = **GitHub Actions** (pas "Deploy from a branch").
+2. Pousser les fichiers modifiés sur `main` (`vite.config.ts` + `.github/workflows/deploy.yml`) pour déclencher le premier run.
+3. Vérifier l'URL `https://vacherf.github.io/3D-print-calculator/` après le run Actions.
+
+**Transition** : story prête pour déploiement effectif dès que l'utilisateur a activé Pages et poussé. Aucune modification de code supplémentaire attendue côté développeur pour ce périmètre.

@@ -9,8 +9,8 @@
 | Story | Titre | Points | Statut |
 |-------|-------|:------:|--------|
 | STORY-004 | Persistance de la saisie | 3 | ✅ Terminé |
-| STORY-005 | Export d'un récapitulatif imprimable | 5 | 👀 En revue |
-| STORY-006 | Déploiement sur GitHub Pages | 3 | 🔜 À faire |
+| STORY-005 | Export d'un récapitulatif imprimable | 5 | ✅ Terminé |
+| STORY-006 | Déploiement sur GitHub Pages | 3 | 👀 En revue |
 
 > Charge totale ~11 points (sprint chargé, assumé pour un projet solo). STORY-006 a une **dépendance externe** : création du repo GitHub par l'utilisateur.
 

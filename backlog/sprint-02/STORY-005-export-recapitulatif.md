@@ -1,6 +1,6 @@
 # STORY-005 — Export d'un récapitulatif imprimable
 
-- **Statut** : 👀 En revue
+- **Statut** : ✅ Terminé
 - **Sprint** : sprint-02 (planifié)
 - **Estimation** : 5 points
 - **Priorité** : Haute
@@ -18,7 +18,7 @@ Pour un usage personnel, le calcul est souvent ponctuel : on veut pouvoir le con
 - [x] Un bouton **« Imprimer / Exporter »** est accessible depuis le récapitulatif de coût.
 - [x] Le récapitulatif reprend les **paramètres clés** (filament, imprimante, quantité, durée, tarif élec.) et le **détail du coût** (matière, énergie, gâche, marge, total).
 - [x] L'export passe par l'**impression navigateur** (`window.print()`) avec une **mise en page dédiée** (styles `@media print` : on masque les contrôles, on garde un document propre).
-- [ ] Le résultat est **lisible en noir & blanc** et tient idéalement sur une page A4. *(à valider visuellement par l'utilisateur — la mise en page A4 et le rendu N&B sont assurés par le CSS mais nécessitent un test manuel)*
+- [x] Le résultat est **lisible en noir & blanc** et tient idéalement sur une page A4. *(validé visuellement par l'utilisateur le 2026-05-22)*
 - [x] La date de génération apparaît sur le document.
 
 ## Notes techniques (indicatives)
@@ -60,9 +60,11 @@ Pour un usage personnel, le calcul est souvent ponctuel : on veut pouvoir le con
   - [x] Paramètres clés + détail du coût présents dans le document.
   - [x] `window.print()` + `@media print` (contrôles masqués, document propre).
   - [x] Date de génération présente (formatée en français).
-  - [ ] Lisibilité N&B et tenue sur A4 : assurée côté CSS (`@page A4`, couleurs noir/blanc, taille 11pt) mais **à valider visuellement** par l'utilisateur dans le navigateur (aperçu avant impression ou export PDF).
+  - [x] Lisibilité N&B et tenue sur A4 : assurée côté CSS (`@page A4`, couleurs noir/blanc, taille 11pt), **validée visuellement** par l'utilisateur (cf. entrée du 2026-05-22 ci-dessous).
 
   **Limites et reste à valider**
   - Le rendu réel dépend du navigateur et du pilote d'imprimante. Un test visuel dans Chrome/Firefox (Fichier > Imprimer ou Ctrl+P depuis l'application) est nécessaire pour valider la tenue sur une page et la lisibilité en noir & blanc.
   - Si le contenu dépasse une page A4 (cas avec beaucoup de paramètres), `page-break-inside: avoid` limite les coupures au milieu d'une section mais ne force pas la mise sur une seule page. Acceptable selon le périmètre défini.
   - Transition vers 👀 En revue.
+
+- 2026-05-22 — Validation manuelle par l'utilisateur via l'aperçu avant impression du navigateur (Ctrl+P) : UI applicative bien masquée, document propre avec paramètres (noms lisibles de filament/imprimante) et détail du coût complet, date en français, lisible en noir & blanc, tient sur une page A4. → ✅ Terminé.
