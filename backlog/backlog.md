@@ -13,9 +13,11 @@ Le PO les détaille (fichier dédié au format `template-story.md`) au moment de
 > 1. **Formule « coût de revient »** — uniformiser vers la forme développée du cahier des charges (coût de base / coût de gâche / coût de revient) dans `CLAUDE.md` (section « Modèle de calcul ») et `README.md` (section « Méthode de calcul »). Le cahier des charges reste inchangé, il est déjà correct.
 > 2. **Lien `backlog/sprint-XX/`** — remplacer ce placeholder dans `CLAUDE.md` (section « Organisation du travail ») par un renvoi unique à `backlog/README.md`, qui est stable et sert déjà de point d'entrée vers les sprints.
 >
-> Prochain numéro de story disponible : **STORY-010**
+> Prochain numéro de story disponible : **STORY-011**
 >
 > **Numérotation 009a/009b** : lors du découpage de STORY-009 (arbitrage du 2026-05-22), les sous-stories ont reçu les suffixes `a` et `b`. Ce mécanisme est réservé aux découpages en cours de sprint ; les nouvelles stories repartent à partir de STORY-010.
+>
+> **STORY-010** (2026-05-22) : sélecteur de langue compact (icône `Languages` + acronyme FR/EN dans le bouton, acronyme + nom natif dans le menu). Implémentation ad hoc réalisée avant formalisation. Placée en sprint-04 (axe i18n). Statut : 👀 En revue.
 
 ## Planifié (sprint 02)
 
