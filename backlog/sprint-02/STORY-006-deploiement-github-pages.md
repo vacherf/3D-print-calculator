@@ -1,7 +1,7 @@
 # STORY-006 — Déploiement sur GitHub Pages
 
-- **Statut** : 👀 En revue
-- **Sprint** : sprint-02 (planifié)
+- **Statut** : ✅ Terminé
+- **Sprint** : sprint-02
 - **Estimation** : 3 points
 - **Priorité** : Moyenne
 - **Dépendance** : nécessite que le projet soit sous git et poussé sur un repo GitHub (action utilisateur : création du repo + authentification).
@@ -16,11 +16,11 @@ Confort d'accès personnel : pouvoir ouvrir le calculateur sur son téléphone o
 
 ## Critères d'acceptation
 
-- [ ] Le projet est versionné avec **git** et poussé sur un **repo GitHub**.
-- [ ] Le build statique est **publié sur GitHub Pages** et accessible via son URL.
-- [ ] La config Vite `base` est correcte pour un projet Pages : **aucune 404** sur les assets (CSS/JS/icônes) une fois en ligne.
-- [ ] Le déploiement est **reproductible** : un workflow GitHub Actions build et publie automatiquement à chaque push sur `main`.
-- [ ] Sur l'URL publiée, l'app fonctionne comme en local : calcul de coût, import STL, sélection d'imprimante.
+- [x] Le projet est versionné avec **git** et poussé sur un **repo GitHub**.
+- [x] Le build statique est **publié sur GitHub Pages** et accessible via son URL.
+- [x] La config Vite `base` est correcte pour un projet Pages : **aucune 404** sur les assets (CSS/JS/icônes) une fois en ligne.
+- [x] Le déploiement est **reproductible** : un workflow GitHub Actions build et publie automatiquement à chaque push sur `main`.
+- [x] Sur l'URL publiée, l'app fonctionne comme en local : calcul de coût, import STL, sélection d'imprimante.
 
 ## Notes techniques (indicatives)
 
@@ -86,3 +86,10 @@ Confort d'accès personnel : pouvoir ouvrir le calculateur sur son téléphone o
 3. Vérifier l'URL `https://vacherf.github.io/3D-print-calculator/` après le run Actions.
 
 **Transition** : story prête pour déploiement effectif dès que l'utilisateur a activé Pages et poussé. Aucune modification de code supplémentaire attendue côté développeur pour ce périmètre.
+
+- 2026-05-22 — Déploiement effectif et clôture.
+  - **Obstacle rencontré** : le champ « Source = GitHub Actions » était absent dans Settings → Pages, car le repo était **privé** sur plan gratuit (API publique → HTTP 404). Pages sur repo privé nécessite un plan payant. Détour aussi évité : un domaine personnalisé avait été ajouté par erreur — il aurait imposé `base: '/'` au lieu de `/3D-print-calculator/` (sinon 404 sur les assets) ; retiré, donc aucune modif de code.
+  - **Résolution (côté utilisateur)** : repo passé en **public**, domaine perso retiré, Source réglée sur **GitHub Actions**.
+  - **Commit & push** : `6db335b` poussé sur `main` (config Vite + workflow + clôtures backlog) → déclenchement du workflow.
+  - **Vérifications en ligne** : run GitHub Actions « Déploiement GitHub Pages » sur `6db335b` → **success** ; `https://vacherf.github.io/3D-print-calculator/` → **HTTP 200** ; assets servis sous `/3D-print-calculator/assets/...` → **HTTP 200** (aucune 404). App validée fonctionnelle en ligne par l'utilisateur (calcul, import STL, sélection imprimante).
+  - Tous les critères d'acceptation cochés. → ✅ Terminé.
