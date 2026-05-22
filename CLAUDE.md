@@ -44,8 +44,11 @@ Séparation nette des responsabilités :
 coût matière     = (masse_g / 1000) × prix_€/kg
 énergie_kWh      = (puissance_W / 1000) × durée_h
 coût électricité = énergie_kWh × prix_€/kWh
-coût de revient  = (coût matière + coût électricité) × (1 + gâche%)
-prix de vente    = coût de revient × (1 + marge%)
+coût de base     = coût matière + coût électricité
+coût de gâche    = coût de base × (gâche% / 100)
+coût de revient  = coût de base + coût de gâche
+marge            = coût de revient × (marge% / 100)
+prix de vente    = coût de revient + marge
 ```
 
 Détail du modèle STL (masse via « coque + remplissage », durée via débit volumétrique) : voir le cahier des charges.
@@ -57,4 +60,4 @@ Process agile léger : **sprints de 2 semaines**, **user stories** dans `backlog
 - **`developer`** — implémente les stories, vérifie, met à jour les statuts.
 - **`documentation`** — maintient la doc (README, CLAUDE.md, docs/, JSDoc) en phase avec le code.
 
-Voir **`backlog/README.md`** pour le process et la Definition of Done, et **`backlog/sprint-XX/`** pour l'avancement.
+Voir **`backlog/README.md`** pour le process, la Definition of Done et l'avancement des sprints.

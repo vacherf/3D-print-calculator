@@ -107,8 +107,11 @@ les chemins d'assets générés par Vite pour éviter les erreurs 404.
 coût matière      = (masse_g / 1000) × prix_€/kg
 énergie_kWh       = (puissance_W / 1000) × durée_h
 coût électricité  = énergie_kWh × prix_€/kWh
-coût de revient   = (coût matière + coût électricité) × (1 + gâche%)
-prix de vente     = coût de revient × (1 + marge%)
+coût de base      = coût matière + coût électricité
+coût de gâche     = coût de base × (gâche% / 100)
+coût de revient   = coût de base + coût de gâche
+marge             = coût de revient × (marge% / 100)
+prix de vente     = coût de revient + marge
 ```
 
 ### Estimation depuis un STL (indicative)

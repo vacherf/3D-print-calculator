@@ -9,6 +9,10 @@ Le PO les détaille (fichier dédié au format `template-story.md`) au moment de
 >
 > ✅ Synchro doc faite le 2026-05-22 par l'agent `documentation` : nuance reportée dans `docs/cahier-des-charges.md` §2.
 >
+> ✅ Décisions doc PO du 2026-05-22 (à appliquer par l'agent `documentation`) :
+> 1. **Formule « coût de revient »** — uniformiser vers la forme développée du cahier des charges (coût de base / coût de gâche / coût de revient) dans `CLAUDE.md` (section « Modèle de calcul ») et `README.md` (section « Méthode de calcul »). Le cahier des charges reste inchangé, il est déjà correct.
+> 2. **Lien `backlog/sprint-XX/`** — remplacer ce placeholder dans `CLAUDE.md` (section « Organisation du travail ») par un renvoi unique à `backlog/README.md`, qui est stable et sert déjà de point d'entrée vers les sprints.
+>
 > Prochain numéro de story disponible : **STORY-007**
 
 ## Planifié (sprint 02)
