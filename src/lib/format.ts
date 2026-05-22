@@ -3,11 +3,14 @@
  *
  * La devise est toujours EUR (pas de conversion monétaire).
  * Le format d'affichage suit la locale active : séparateurs décimaux et de
- * milliers adaptés (ex. `1 234,56 €` en fr-FR, `€1,234.56` en en-US).
+ * milliers adaptés (ex. `1 234,56 €` en fr-FR, `€1,234.56` en en-US,
+ * `1.234,56 €` en de-DE).
  *
  * Correspondance locale ↔ code BCP-47 :
  *   "fr" → "fr-FR"
  *   "en" → "en-US"
+ *   "es" → "es-ES"
+ *   "de" → "de-DE"
  *
  * Les formateurs sont mis en cache par locale pour éviter de recréer des
  * objets `Intl.NumberFormat` à chaque appel.
@@ -19,6 +22,8 @@ import type { Locale } from "@/locales"
 const LOCALE_MAP: Record<Locale, string> = {
   fr: "fr-FR",
   en: "en-US",
+  es: "es-ES",
+  de: "de-DE",
 }
 
 /** Locale par défaut utilisée quand aucune n'est précisée. */

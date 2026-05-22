@@ -22,7 +22,7 @@ import {
 } from "@/locales"
 
 export interface UseI18n {
-  /** Code de langue actif : « fr » ou « en ». */
+  /** Code de langue actif : « fr », « en », « es » ou « de ». */
   locale: Locale
   /** Dictionnaire de traductions correspondant à la locale active. */
   t: Translations
@@ -50,9 +50,11 @@ function resolveInitialLocale(): Locale {
 export function useI18n(): UseI18n {
   const [locale, setLocaleState] = useState<Locale>(resolveInitialLocale)
 
-  // Persiste la locale à chaque changement
+  // Persiste la locale et synchronise l'attribut lang de <html> à chaque changement.
+  // Pattern identique à useTheme pour la synchronisation du DOM.
   useEffect(() => {
     saveLocale(locale)
+    document.documentElement.lang = locale
   }, [locale])
 
   const setLocale = (newLocale: Locale) => {

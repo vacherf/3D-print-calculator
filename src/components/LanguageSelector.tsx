@@ -8,6 +8,8 @@
 
 import FR from "country-flag-icons/react/3x2/FR"
 import GB from "country-flag-icons/react/3x2/GB"
+import ES from "country-flag-icons/react/3x2/ES"
+import DE from "country-flag-icons/react/3x2/DE"
 import type { ComponentType } from "react"
 
 import {
@@ -35,7 +37,7 @@ interface LanguageSelectorProps {
 const FLAGS: Record<
   string,
   ComponentType<{ title?: string; className?: string }> | undefined
-> = { FR, GB }
+> = { FR, GB, ES, DE }
 
 /** Drapeau SVG d'un pays, ou rien si le code est inconnu. */
 function Flag({ country, label }: { country: string; label: string }) {

@@ -9,11 +9,13 @@
 
 import { fr } from "./fr"
 import { en } from "./en"
+import { es } from "./es"
+import { de } from "./de"
 
 export type { Translations } from "./fr"
 
 /** Codes de langue supportés. Extensible sans refactoring du consommateur. */
-export type Locale = "fr" | "en"
+export type Locale = "fr" | "en" | "es" | "de"
 
 /** Clé localStorage dédiée à la langue — indépendante des données calculateur. */
 export const LANG_STORAGE_KEY = "print3d-ui:lang"
@@ -31,12 +33,16 @@ export const SUPPORTED_LOCALES: ReadonlyArray<{
 }> = [
   { code: "fr", label: "Français", labelNative: "Français", country: "FR" },
   { code: "en", label: "English", labelNative: "English", country: "GB" },
+  { code: "es", label: "Español", labelNative: "Español", country: "ES" },
+  { code: "de", label: "Deutsch", labelNative: "Deutsch", country: "DE" },
 ] as const
 
 /** Dictionnaires indexés par code de langue. */
 export const DICTIONARIES: Record<Locale, typeof fr> = {
   fr,
   en,
+  es,
+  de,
 } as const
 
 /**
@@ -46,7 +52,8 @@ export const DICTIONARIES: Record<Locale, typeof fr> = {
 export function loadLocale(): Locale | null {
   try {
     const stored = localStorage.getItem(LANG_STORAGE_KEY)
-    if (stored === "fr" || stored === "en") return stored
+    if (stored === "fr" || stored === "en" || stored === "es" || stored === "de")
+      return stored
     return null
   } catch {
     return null

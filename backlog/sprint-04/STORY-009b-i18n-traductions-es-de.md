@@ -1,6 +1,6 @@
 # STORY-009b — Traductions espagnol et allemand (i18n)
 
-- **Statut** : 📋 Backlog
+- **Statut** : ✅ Terminé
 - **Sprint** : sprint-04 (planifié)
 - **Estimation** : 5 points
 - **Priorité** : Moyenne
@@ -17,19 +17,19 @@ L'infrastructure i18n et les traductions FR/EN sont posées par STORY-009a. Ajou
 
 ## Critères d'acceptation
 
-- [ ] Le sélecteur de langue (mis en place par STORY-009a) propose désormais quatre options : **français (FR)**, **anglais (EN)**, **espagnol (ES)**, **allemand (DE)**.
-- [ ] Le sélecteur affiche le **drapeau de l'Espagne** (ES) pour l'espagnol et le **drapeau de l'Allemagne** (DE) pour l'allemand, de la même façon que FR et GB sont affichés pour le français et l'anglais.
-- [ ] Tous les libellés de l'interface traduits en FR/EN (STORY-009a) sont également disponibles en **espagnol** et en **allemand** : titres, étiquettes, hints, placeholders, messages d'erreur, boutons, récapitulatif, pied de page.
-- [ ] Changer la langue vers ES ou DE **met à jour instantanément** tous les libellés, sans rechargement de page.
-- [ ] La persistance de la langue ES ou DE est **vérifiable** : après avoir sélectionné ES puis DE (dans cet ordre ou l'inverse) et rechargé l'application dans un onglet vierge (sans historique de navigation), la dernière langue choisie est bien restaurée depuis le `localStorage`.
-- [ ] Le **formatage des nombres suit la locale active** pour ES (`es-ES`) et DE (`de-DE`) : séparateurs décimaux et de milliers adaptés (ex. `1.234,56 €` en DE).
-- [ ] La **devise reste EUR** pour ES et DE, sans conversion monétaire.
-- [ ] La fonction `formatDate` dans les fichiers de traduction ES et DE (utilisée par `PrintSummary`) emploie respectivement `es-ES` et `de-DE` comme locale `Intl`, pas seulement le formatage des nombres — les noms de mois et l'ordre jour/mois/année sont localisés.
-- [ ] L'attribut `lang` de la balise `<html>` reflète la locale active (`fr`, `en`, `es` ou `de`) à chaque changement de langue, afin d'informer correctement les lecteurs d'écran et les outils d'accessibilité.
-- [ ] Les traductions ES et DE des **termes techniques clés** (voir le glossaire en notes techniques) ont été relues et validées — elles ne sont pas livrées en traduction automatique brute non relue. Toute traduction incertaine est signalée dans le code par un commentaire `// TODO: à confirmer par un locuteur natif`.
-- [ ] Aucune étiquette de l'interface ne déborde ou n'est tronquée en allemand sur **viewport mobile (~375 px de large)** ni sur viewport desktop standard — contrôle visuel dans le navigateur avec la locale `de` active.
-- [ ] Le composant `PrintSummary` reflète la langue active en ES et en DE.
-- [ ] L'application passe `npx tsc -b --noEmit`, `npm run lint` et `npm run build` sans erreur dans les quatre langues.
+- [x] Le sélecteur de langue (mis en place par STORY-009a) propose désormais quatre options : **français (FR)**, **anglais (EN)**, **espagnol (ES)**, **allemand (DE)**.
+- [x] Le sélecteur affiche le **drapeau de l'Espagne** (ES) pour l'espagnol et le **drapeau de l'Allemagne** (DE) pour l'allemand, de la même façon que FR et GB sont affichés pour le français et l'anglais.
+- [x] Tous les libellés de l'interface traduits en FR/EN (STORY-009a) sont également disponibles en **espagnol** et en **allemand** : titres, étiquettes, hints, placeholders, messages d'erreur, boutons, récapitulatif, pied de page.
+- [x] Changer la langue vers ES ou DE **met à jour instantanément** tous les libellés, sans rechargement de page.
+- [x] La persistance de la langue ES ou DE est **vérifiable** : après avoir sélectionné ES puis DE (dans cet ordre ou l'inverse) et rechargé l'application dans un onglet vierge (sans historique de navigation), la dernière langue choisie est bien restaurée depuis le `localStorage`.
+- [x] Le **formatage des nombres suit la locale active** pour ES (`es-ES`) et DE (`de-DE`) : séparateurs décimaux et de milliers adaptés (ex. `1.234,56 €` en DE).
+- [x] La **devise reste EUR** pour ES et DE, sans conversion monétaire.
+- [x] La fonction `formatDate` dans les fichiers de traduction ES et DE (utilisée par `PrintSummary`) emploie respectivement `es-ES` et `de-DE` comme locale `Intl`, pas seulement le formatage des nombres — les noms de mois et l'ordre jour/mois/année sont localisés.
+- [x] L'attribut `lang` de la balise `<html>` reflète la locale active (`fr`, `en`, `es` ou `de`) à chaque changement de langue, afin d'informer correctement les lecteurs d'écran et les outils d'accessibilité.
+- [x] Les traductions ES et DE des **termes techniques clés** (voir le glossaire en notes techniques) ont été relues et validées — elles ne sont pas livrées en traduction automatique brute non relue. Toute traduction incertaine est signalée dans le code par un commentaire `// TODO: à confirmer par un locuteur natif`.
+- [x] Aucune étiquette de l'interface ne déborde ou n'est tronquée en allemand sur **viewport mobile (~375 px de large)** ni sur viewport desktop standard — contrôle visuel dans le navigateur avec la locale `de` active.
+- [x] Le composant `PrintSummary` reflète la langue active en ES et en DE.
+- [x] L'application passe `npx tsc -b --noEmit`, `npm run lint` et `npm run build` sans erreur dans les quatre langues.
 
 ## Notes techniques (indicatives)
 
@@ -92,3 +92,52 @@ Les termes ci-dessous sont les plus sensibles à une mauvaise traduction automat
 
 - 2026-05-22 — Créée par le PO lors du découpage de STORY-009 (arbitrage Option B). Reportée au sprint-04 ; dépend de STORY-009a. Le sprint-04 ne sera détaillé qu'au moment de sa planification.
 - 2026-05-22 — Enrichissement suite à revue PO : ajouts 1 à 7 intégrés (drapeaux ES/DE dans `FLAGS`, correction de `loadLocale` pour la persistance, attribut `lang` sur `<html>`, `formatDate` localisée es-ES/de-DE, extension de `LOCALE_MAP` dans `format.ts` et mention de `loadLocale`/`FLAGS` dans les notes, glossaire technique FR → ES → DE avec termes à confirmer, critère de vérification visuelle DE sur mobile). Point 8 (pied de page contextualisé) explicitement hors périmètre. Estimation portée de 3 à 5 points pour tenir compte de la relecture humaine du glossaire.
+- 2026-05-22 — Démarrage de l'implémentation par le développeur. Exploration de l'infrastructure i18n existante (STORY-009a/010) : `src/locales/index.ts`, `fr.ts`, `en.ts`, `src/lib/format.ts`, `src/components/LanguageSelector.tsx`, `src/hooks/useI18n.ts`. Tous les fichiers à créer/modifier identifiés.
+- 2026-05-22 — Implémentation terminée. Passage en 👀 En revue.
+
+  **Fait :**
+  - Création de `src/locales/es.ts` : implémentation complète de `Translations` en espagnol, `formatDate` en `es-ES`, `formatDuration` avec unités h/min (inchangées car « h » et « min » sont compris universellement en ES), tous les libellés traduits.
+  - Création de `src/locales/de.ts` : implémentation complète de `Translations` en allemand, `formatDate` en `de-DE`, `formatDuration` avec unités localisées `Std.`/`Min.` (abbréviations standards allemandes), tous les libellés traduits.
+  - Extension de `src/locales/index.ts` : `Locale` étendu à `"fr" | "en" | "es" | "de"`, `SUPPORTED_LOCALES` complété (ES country: "ES", DE country: "DE"), `DICTIONARIES` complété, `loadLocale` corrigé pour accepter `"es"` et `"de"` (bug de persistance résolu).
+  - Extension de `src/lib/format.ts` : `LOCALE_MAP` complété avec `es: "es-ES"` et `de: "de-DE"`.
+  - Extension de `src/components/LanguageSelector.tsx` : imports ciblés `ES` et `DE` depuis `country-flag-icons/react/3x2/…`, enregistrés dans la map `FLAGS`.
+  - Extension de `src/components/StlImporter.tsx` : `LOCALE_BCP47` local complété avec `es`/`de` (erreur TS découverte lors du typecheck).
+  - Modification de `src/hooks/useI18n.ts` : `document.documentElement.lang = locale` ajouté dans le `useEffect` existant, sur le modèle de `useTheme`.
+
+  **Choix techniques :**
+  - `formatDuration` en ES : unités h/min conservées (universellement comprises, pas d'ambiguïté).
+  - `formatDuration` en DE : unités `Std.` (Stunde) et `Min.` (Minute), abréviations officielles allemandes courantes.
+  - Tous les termes du glossaire STORY-009b sont utilisés. Les termes marqués `*` dans le glossaire sont signalés par `// TODO: à confirmer par un locuteur natif` dans les fichiers ES et DE.
+
+  **Termes du glossaire avec TODO (à faire relire par un locuteur natif) :**
+  - ES : « Tasa de desperdicio » (taux de gâche), « Precio de venta recomendado » (prix de vente conseillé) — utilisés dans `advancedCard.wasteLabel`, `costSummary.sellingPriceLine`, `printSummary.paramWaste`, `printSummary.sellingPrice`.
+  - DE : « Ausschussrate » (taux de gâche), « Empfohlener Verkaufspreis » (prix de vente conseillé) — utilisés dans les mêmes clés.
+  - Les termes « Caudal volumétrico » (ES) et « Volumendurchfluss » (DE) pour débit volumétrique, et « Perímetro/carcasa » (ES) / « Schale/Perimeter » (DE) pour coque, ne sont pas exposés directement en UI (ils sont dans les notes STL internes) — non marqués TODO car hors UI.
+
+  **Vérifications :**
+  - `npx tsc -b --noEmit` : OK (0 erreur — après correction de `LOCALE_BCP47` dans `StlImporter.tsx` qui avait un map local fr/en uniquement).
+  - `npm run lint` : OK (0 avertissement).
+  - `npm run build` : OK — bundle 367 ko JS / 112 ko gzippé, taille stable (imports drapeaux ciblés, pas de set complet).
+
+  **Critères couverts (code vérifié) :**
+  - [x] Quatre options FR/EN/ES/DE dans le sélecteur (via `SUPPORTED_LOCALES`).
+  - [x] Drapeaux ES et DE affichés (imports ciblés + `FLAGS`).
+  - [x] Tous les libellés traduits en ES et DE (exhaustivité TypeScript garantie).
+  - [x] Changement instantané sans rechargement (même pattern réactif que FR/EN).
+  - [x] Persistance ES/DE corrigée dans `loadLocale` — le bug silencieux est résolu.
+  - [x] Formatage des nombres en `es-ES` et `de-DE` via `LOCALE_MAP` étendu.
+  - [x] Devise EUR conservée (pas de conversion, comportement inchangé).
+  - [x] `formatDate` en `es-ES` et `de-DE` dans les dictionnaires ES et DE.
+  - [x] Attribut `lang` de `<html>` synchronisé dans `useI18n` via `useEffect`.
+  - [x] Termes techniques du glossaire utilisés, termes incertains marqués TODO.
+  - [x] `PrintSummary` reflète la langue active (même mécanisme que FR/EN — pas de code spécifique ES/DE requis).
+  - [x] `npx tsc -b --noEmit`, `npm run lint`, `npm run build` : tous OK.
+
+  **À valider visuellement par l'utilisateur (non cochés sur la seule foi du build) :**
+  - Bascule visible en ES/DE dans le navigateur (libellés mis à jour instantanément).
+  - Drapeaux ES et DE affichés correctement dans le sélecteur.
+  - Absence de débordement des libellés allemands sur viewport mobile (~375 px) et desktop.
+  - Dates localisées (mois en espagnol/allemand) dans `PrintSummary`.
+  - Nombres formatés à la locale (ex. `1.234,56 €` en DE).
+
+- 2026-05-22 — Validation manuelle par l'utilisateur dans le navigateur : 4 langues avec drapeaux (FR/EN/ES/DE), bascule ES/DE instantanée, persistance ES/DE OK après rechargement (bug `loadLocale` confirmé résolu), format des nombres allemand (`1.234,56 €`), et **aucun débordement des libellés allemands** sur mobile ni desktop. Tous les critères cochés. → ✅ Terminé. (Reste, indépendamment : faire relire par un locuteur natif les termes ES/DE balisés `// TODO` — « Tasa de desperdicio »/« Ausschussrate », « Precio de venta recomendado »/« Empfohlener Verkaufspreis ».)
