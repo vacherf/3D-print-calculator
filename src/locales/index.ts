@@ -1,9 +1,9 @@
 /**
  * Point d'entrée du module de localisation.
  *
- * Exporte les dictionnaires de toutes les langues disponibles et les types
- * associés. Pour ajouter une langue (ex. ES, DE — STORY-009b), il suffit :
- *   1. de créer `es.ts` / `de.ts` implémentant le type `Translations`,
+ * Exporte les dictionnaires de toutes les langues disponibles (FR, EN, ES, DE)
+ * et les types associés. Pour ajouter une langue supplémentaire, il suffit :
+ *   1. de créer le fichier `.ts` implémentant le type `Translations`,
  *   2. de l'ajouter au tableau `SUPPORTED_LOCALES` et à la map `DICTIONARIES`.
  */
 

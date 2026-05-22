@@ -3,12 +3,12 @@
  *
  * La devise est toujours EUR (pas de conversion monétaire).
  * Le format d'affichage suit la locale active : séparateurs décimaux et de
- * milliers adaptés (ex. `1 234,56 €` en fr-FR, `€1,234.56` en en-US,
+ * milliers adaptés (ex. `1 234,56 €` en fr-FR, `€1,234.56` en en-GB,
  * `1.234,56 €` en de-DE).
  *
  * Correspondance locale ↔ code BCP-47 :
  *   "fr" → "fr-FR"
- *   "en" → "en-US"
+ *   "en" → "en-GB"
  *   "es" → "es-ES"
  *   "de" → "de-DE"
  *
@@ -21,7 +21,7 @@ import type { Locale } from "@/locales"
 /** Mapping code langue court → locale BCP-47 complète. */
 const LOCALE_MAP: Record<Locale, string> = {
   fr: "fr-FR",
-  en: "en-US",
+  en: "en-GB",
   es: "es-ES",
   de: "de-DE",
 }
@@ -65,7 +65,7 @@ function getNumberFormatter(bcp47: string): Intl.NumberFormat {
  * La devise est EUR dans tous les cas — seul le format change.
  *
  * @param value  Montant en euros.
- * @param locale Code de langue de l'application ("fr" | "en"). Défaut : "fr".
+ * @param locale Code de langue de l'application ("fr" | "en" | "es" | "de"). Défaut : "fr".
  *
  * @example
  *   formatEuros(1234.56, "fr") // "1 234,56 €"
@@ -80,7 +80,7 @@ export function formatEuros(value: number, locale?: Locale): string {
  * Formate une valeur en kWh selon la locale active.
  *
  * @param value  Quantité d'énergie en kilowattheures.
- * @param locale Code de langue de l'application ("fr" | "en"). Défaut : "fr".
+ * @param locale Code de langue de l'application ("fr" | "en" | "es" | "de"). Défaut : "fr".
  */
 export function formatKwh(value: number, locale?: Locale): string {
   const bcp47 = locale ? LOCALE_MAP[locale] : DEFAULT_BCP47

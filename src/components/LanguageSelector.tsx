@@ -1,9 +1,10 @@
 /**
  * Sélecteur de langue de l'interface.
  *
- * Affiche un menu déroulant compact (drapeau + code FR / EN) dans l'en-tête,
- * à côté du bouton de bascule de thème. Les drapeaux sont des SVG fournis par
- * `country-flag-icons` (les emojis-drapeaux ne s'affichent pas sous Windows).
+ * Affiche un menu déroulant compact (drapeau + code FR / EN / ES / DE) dans
+ * l'en-tête, à côté du bouton de bascule de thème. Les drapeaux sont des SVG
+ * fournis par `country-flag-icons` (les emojis-drapeaux ne s'affichent pas
+ * sous Windows).
  */
 
 import FR from "country-flag-icons/react/3x2/FR"
@@ -32,7 +33,7 @@ interface LanguageSelectorProps {
 /**
  * Drapeaux indexés par code pays ISO. On importe uniquement les drapeaux
  * réellement utilisés (tree-shaking) — ajouter une langue = importer son
- * drapeau et l'enregistrer ici (ex. `ES`, `DE` pour STORY-009b).
+ * drapeau et l'enregistrer ici.
  */
 const FLAGS: Record<
   string,

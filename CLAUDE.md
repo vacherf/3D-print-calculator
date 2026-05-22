@@ -4,10 +4,10 @@
 
 ## En une phrase
 
-Application web **bilingue (FR/EN)** qui estime le **coût de revient d'une impression 3D** (filament + électricité, marché français), avec import STL, sélection de l'imprimante, thème clair/sombre et interface robuste (ErrorBoundary).
+Application web **multilingue (FR/EN/ES/DE)** qui estime le **coût de revient d'une impression 3D** (filament + électricité, marché français), avec import STL, sélection de l'imprimante, thème clair/sombre et interface robuste (ErrorBoundary).
 
 - **Cible** : hobbyiste / usage personnel. Utilisable en local (`npm run dev`) ou via l'URL GitHub Pages : **https://vacherf.github.io/3D-print-calculator/**
-- **Langue** : commentaires et docs en **français** ; UI en FR par défaut, basculable en EN. Devise EUR invariante.
+- **Langue** : commentaires et docs en **français** ; UI disponible en FR (défaut), EN, ES, DE — bascule dans l'en-tête, persistée. Devise EUR invariante.
 
 ## Stack
 
@@ -28,18 +28,18 @@ npm run lint       # ESLint (config flat eslint.config.js — opérationnel)
 Séparation nette des responsabilités :
 
 - **`src/lib/`** — logique métier **pure** (testable, sans React) : `calculator.ts` (moteur de coût), `stl.ts` (parseur + géométrie), `filaments.ts`, `printers.ts`, `electricity.ts`, `format.ts` (paramètre `locale` optionnel, devise EUR fixe), `persistence.ts` (lecture/écriture `localStorage`, clé versionnée `print3d-calc:v1`).
-- **`src/locales/`** — dictionnaires de traductions TypeScript (`fr.ts`, `en.ts`, `index.ts`). Pour ajouter une langue : créer le fichier implémentant `Translations` et l'enregistrer dans `SUPPORTED_LOCALES`.
+- **`src/locales/`** — dictionnaires de traductions TypeScript (`fr.ts`, `en.ts`, `es.ts`, `de.ts`, `index.ts`). `Locale = "fr" | "en" | "es" | "de"` ; `SUPPORTED_LOCALES` liste les quatre langues avec leur code pays (FR/GB/ES/DE) pour les drapeaux SVG. Pour ajouter une langue : créer le fichier implémentant `Translations` et l'enregistrer dans `SUPPORTED_LOCALES`.
 - **`src/contexts/`** — couche i18n React : `I18nContextObject.ts` (objet contexte), `I18nContext.tsx` (`I18nProvider`), `i18n.ts` (hook `useI18nContext`). Découpé en trois fichiers par contrainte ESLint `react-refresh/only-export-components`.
 - **`src/hooks/`** — `useCalculator.ts` (état global + dérivation du calcul), `useTheme.ts` (thème clair/sombre, clé `print3d-ui:theme`), `useI18n.ts` (langue active, dictionnaire `t`, clé `print3d-ui:lang`).
-- **`src/components/`** — UI. `ui/` = primitives shadcn ; ne pas y mettre de logique métier. `ErrorBoundary.tsx` = composant de classe + `ErrorFallback` fonctionnel (accès au contexte i18n). `LanguageSelector.tsx` = sélecteur compact FR/EN dans l'en-tête.
+- **`src/components/`** — UI. `ui/` = primitives shadcn ; ne pas y mettre de logique métier. `ErrorBoundary.tsx` = composant de classe + `ErrorFallback` fonctionnel (accès au contexte i18n). `LanguageSelector.tsx` = sélecteur compact (drapeau + acronyme) FR/EN/ES/DE dans l'en-tête.
 - **`src/main.tsx`** — ordre d'imbrication : `I18nProvider` > `ErrorBoundary` > `App` (le provider doit être au-dessus pour que le fallback soit traduit).
 
 ## Conventions
 
 - Imports via l'alias **`@/`** (`@/lib/...`, `@/components/...`).
-- Commentaires et docs en **français** ; libellés UI dans les dictionnaires `src/locales/` (FR = référence, EN = traduction). Formatage via `src/lib/format.ts` (€, kWh selon la locale active, devise EUR invariante).
+- Commentaires et docs en **français** ; libellés UI dans les dictionnaires `src/locales/` (FR = référence, EN/ES/DE = traductions). Formatage via `src/lib/format.ts` (€, kWh selon la locale active : `fr-FR`, `en-GB`, `es-ES`, `de-DE` — devise EUR invariante).
 - Toute nouvelle règle de calcul va dans `src/lib/` sous forme de fonction pure.
-- Tout nouveau libellé UI va dans `fr.ts` **et** `en.ts` simultanément (TypeScript vérifie l'exhaustivité).
+- Tout nouveau libellé UI va dans les **quatre** dictionnaires (`fr.ts`, `en.ts`, `es.ts`, `de.ts`) simultanément (TypeScript vérifie l'exhaustivité).
 - Préférences UI (thème, langue) : clés `localStorage` dédiées `print3d-ui:*`, indépendantes de `print3d-calc:v1`.
 - Pas de dépendance lourde sans nécessité ; réutiliser l'existant (`NumberField`, `Select`, `Card`, `useCalculator`, `useI18nContext`).
 

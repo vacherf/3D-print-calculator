@@ -25,7 +25,7 @@ const DEFAULT_INFILL = 15
 /** Correspondance locale courte → BCP-47 (pour les métriques STL). */
 const LOCALE_BCP47 = {
   fr: "fr-FR",
-  en: "en-US",
+  en: "en-GB",
   es: "es-ES",
   de: "de-DE",
 } as const

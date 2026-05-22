@@ -37,11 +37,14 @@ l'électricité en France**. Construite avec **Vite + React + TypeScript** et
   `localStorage` (clé `print3d-ui:theme`). La préférence système
   (`prefers-color-scheme`) est détectée au premier chargement si aucun choix
   n'a encore été enregistré. L'impression reste invariablement en noir & blanc.
-- **Interface bilingue FR / EN** : sélecteur de langue dans l'en-tête, bascule
-  instantanée, persistée (clé `print3d-ui:lang`). Le formatage des montants
-  suit la locale active via `Intl.NumberFormat` (devise EUR invariante :
-  `1 234,56 €` en français, `€1,234.56` en anglais). Les langues espagnole et
-  allemande sont prévues (sprint 04).
+- **Interface multilingue FR / EN / ES / DE** : sélecteur de langue dans
+  l'en-tête (drapeau + acronyme), bascule instantanée, persistée (clé
+  `print3d-ui:lang`). Français par défaut. Le formatage des montants suit la
+  locale active via `Intl.NumberFormat` (devise EUR invariante : `1 234,56 €`
+  en français, `€1,234.56` en anglais, `1.234,56 €` en allemand…). L'attribut
+  `lang` de `<html>` est synchronisé à chaque changement de langue (accessibilité).
+  Certaines formulations techniques en espagnol et en allemand sont balisées
+  `// TODO` dans les dictionnaires pour confirmation par un locuteur natif.
 - **Robustesse** : un `ErrorBoundary` enveloppe toute l'application ; en cas
   d'erreur JavaScript inattendue, un écran de repli traduit s'affiche à la
   place d'un écran blanc, avec un bouton « Réessayer » (les données saisies
@@ -68,7 +71,7 @@ src/
 │   ├── CalculatorForm.tsx   # Formulaire de saisie
 │   ├── CostSummary.tsx      # Récapitulatif chiffré (+ bouton Imprimer)
 │   ├── ErrorBoundary.tsx    # Filet de sécurité : écran de repli traduit si erreur JS
-│   ├── LanguageSelector.tsx # Sélecteur de langue (FR / EN)
+│   ├── LanguageSelector.tsx # Sélecteur de langue (FR / EN / ES / DE)
 │   ├── PrintSummary.tsx     # Document réservé à l'impression (@media print)
 │   ├── StlImporter.tsx      # Import & analyse d'un fichier STL
 │   ├── FilamentSelector.tsx # Sélecteur de filament
@@ -86,7 +89,9 @@ src/
 ├── locales/
 │   ├── index.ts             # Point d'entrée : types, SUPPORTED_LOCALES, helpers
 │   ├── fr.ts                # Traductions françaises (type Translations défini ici)
-│   └── en.ts                # Traductions anglaises
+│   ├── en.ts                # Traductions anglaises
+│   ├── es.ts                # Traductions espagnoles
+│   └── de.ts                # Traductions allemandes
 └── lib/
     ├── calculator.ts        # Moteur de calcul (fonctions pures)
     ├── calculator.test.ts   # Tests du moteur de calcul

@@ -84,7 +84,7 @@ L'import STL renseigne masse + durée ; modifier le taux de remplissage recalcul
 | # | Exigence | Détail |
 |---|----------|--------|
 | ENF-1 | **100 % client** | Aucun backend ; tout le calcul se fait dans le navigateur. Fonctionne hors-ligne une fois la page chargée. |
-| ENF-2 | **Localisation** | Interface disponible en **français** (défaut) et **anglais** (bascule dans l'en-tête, persistée). Formatage selon la locale via `Intl.NumberFormat` ; devise **EUR** invariante ; références marché **France**. |
+| ENF-2 | **Localisation** | Interface disponible en **4 langues** : français (défaut), anglais, espagnol, allemand — sélecteur dans l'en-tête (drapeau + acronyme), bascule instantanée, persistée (`print3d-ui:lang`). L'attribut `lang` de `<html>` suit la langue active (accessibilité). Formatage selon la locale via `Intl.NumberFormat` (`fr-FR`, `en-GB`, `es-ES`, `de-DE`) ; devise **EUR** invariante ; références marché **France**. Certaines formulations techniques ES/DE sont balisées `// TODO` dans les dictionnaires pour confirmation par un locuteur natif (dette mineure, non bloquante). |
 | ENF-3 | **Simplicité** | Un seul écran, lisible, sans configuration. Pas de compte, pas d'analytics, pas de SEO requis (usage local). |
 | ENF-4 | **Réactivité** | Calcul instantané ; analyse STL fluide pour des fichiers courants (jusqu'à ~plusieurs centaines de milliers de triangles). |
 | ENF-5 | **Responsive** | Utilisable sur desktop et mobile. |
@@ -105,8 +105,7 @@ L'import STL renseigne masse + durée ; modifier le taux de remplissage recalcul
 - Slicing réel, supports, multi-matériaux / multi-couleurs.
 - **Amortissement de l'imprimante et usure** (buse, plateau) — _backlog, priorité basse (orienté pro)._
 - **Multi-pièces / impression en lot** — _backlog, hors cible actuelle._
-- **Langues supplémentaires** (espagnol ES, allemand DE) — _planifiées en sprint 04 (STORY-009b) ; l'infrastructure i18n est en place._
-- **Devises autres qu'EUR** — _hors périmètre ; la devise est EUR invariante même en mode anglais._
+- **Devises autres qu'EUR** — _hors périmètre ; la devise est EUR invariante même en mode anglais/espagnol/allemand._
 - Comptes utilisateurs, synchronisation cloud, historique de plusieurs estimations.
 - Génération de devis commercial avec branding (logo, mentions légales).
 
@@ -127,7 +126,7 @@ Process agile léger :
 - **Sprint 01** ✅ — Fiabiliser l'estimation d'entrée : import STL, sélection d'imprimante, configuration ESLint. Clôturé le 2026-05-22.
 - **Sprint 02** ✅ — Confort, restitution & accès : persistance de la saisie (`localStorage`), récapitulatif imprimable (`window.print()` + `@media print`), déploiement GitHub Pages. Clôturé le 2026-05-22. Application accessible sur https://vacherf.github.io/3D-print-calculator/
 - **Sprint 03** ✅ — Expérience et robustesse : `ErrorBoundary` (écran de repli FR/EN), thème clair/sombre (persisté, détection système), infrastructure i18n + interface FR/EN. Clôturé le 2026-05-22.
-- **Sprint 04 (en cours)** — Traductions espagnol (ES) et allemand (DE) — STORY-009b.
+- **Sprint 04** ✅ — Traductions espagnol (ES) et allemand (DE) — STORY-009b. Clôturé le 2026-05-22. Interface disponible en 4 langues (FR/EN/ES/DE).
 - **Backlog** — paramètres STL avancés, bibliothèque de filaments personnalisée, aperçu 3D… (voir `backlog/backlog.md`).
 
 ## 10. Glossaire
