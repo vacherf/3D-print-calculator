@@ -126,7 +126,7 @@ Process agile léger :
 - **Sprint 01** ✅ — Fiabiliser l'estimation d'entrée : import STL, sélection d'imprimante, configuration ESLint. Clôturé le 2026-05-22.
 - **Sprint 02** ✅ — Confort, restitution & accès : persistance de la saisie (`localStorage`), récapitulatif imprimable (`window.print()` + `@media print`), déploiement GitHub Pages. Clôturé le 2026-05-22. Application accessible sur https://vacherf.github.io/3D-print-calculator/
 - **Sprint 03** ✅ — Expérience et robustesse : `ErrorBoundary` (écran de repli FR/EN), thème clair/sombre (persisté, détection système), infrastructure i18n + interface FR/EN. Clôturé le 2026-05-22.
-- **Sprint 04** ✅ — Traductions espagnol (ES) et allemand (DE) — STORY-009b. Clôturé le 2026-05-22. Interface disponible en 4 langues (FR/EN/ES/DE).
+- **Sprint 04** ✅ (clôturé 2026-05-22) — Traductions ES/DE (STORY-009b) + sélecteur de langue drapeau/acronyme (STORY-010). Interface disponible en 4 langues FR/EN/ES/DE.
 - **Backlog** — paramètres STL avancés, bibliothèque de filaments personnalisée, aperçu 3D… (voir `backlog/backlog.md`).
 
 ## 10. Glossaire
