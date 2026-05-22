@@ -103,9 +103,96 @@ describe("estimateFilamentGrams", () => {
   })
 })
 
+describe("analyzeStl — cas limites supplémentaires", () => {
+  it("calcule des bounds correctes pour un objet non centré sur l'origine", () => {
+    // Triangle dans le plan XY à z=5 (objet décalé)
+    let s = "solid offset\nfacet normal 0 0 1\n outer loop\n"
+    s += "  vertex 10 10 5\n  vertex 20 10 5\n  vertex 15 20 5\n"
+    s += " endloop\nendfacet\nendsolid offset\n"
+    const buf = new TextEncoder().encode(s).buffer
+    const a = analyzeStl(buf)
+    // bounds = étendue, pas position absolue
+    expect(a.bounds.x).toBeCloseTo(10, 5)
+    expect(a.bounds.y).toBeCloseTo(10, 5)
+    expect(a.bounds.z).toBe(0) // triangle plat en Z
+  })
+
+  it("rejette un buffer de taille exactement inférieure à 15 octets", () => {
+    expect(() => analyzeStl(new ArrayBuffer(14))).toThrow(StlParseError)
+  })
+
+  it("accepte un buffer de taille exactement 15 octets (ASCII court, mais traité comme ASCII vide)", () => {
+    // 15 octets = seuil minimum ; le contenu n'est pas un STL valide → lève StlParseError
+    // (aucun triangle trouvé, donc finalize() lève)
+    const buf = new TextEncoder().encode("solid x\nendsolid").buffer
+    expect(buf.byteLength).toBeGreaterThanOrEqual(15)
+    expect(() => analyzeStl(buf)).toThrow(StlParseError)
+  })
+})
+
+describe("estimateFilamentGrams — cas limites supplémentaires", () => {
+  const cube = () => analyzeStl(buildBinaryCube())
+
+  it("remplissage à 0 % : seule la coque est extrudée", () => {
+    const { extrudedVolumeCm3 } = estimateFilamentGrams(cube(), {
+      density: 1.24,
+      infillPercent: 0,
+    })
+    // coque = min(6 cm² × 0,12 cm, 1 cm³) = 0,72 cm³
+    expect(extrudedVolumeCm3).toBeCloseTo(0.72, 5)
+  })
+
+  it("remplissage à 100 % : volume entier extrudé", () => {
+    const { extrudedVolumeCm3 } = estimateFilamentGrams(cube(), {
+      density: 1.24,
+      infillPercent: 100,
+    })
+    expect(extrudedVolumeCm3).toBeCloseTo(1, 5)
+  })
+
+  it("la masse est le volume extrudé × densité", () => {
+    const density = 1.27 // PETG
+    const result = estimateFilamentGrams(cube(), {
+      density,
+      infillPercent: 20,
+    })
+    expect(result.grams).toBeCloseTo(result.extrudedVolumeCm3 * density, 10)
+  })
+
+  it("paroi très fine (0,4 mm) réduit le volume de coque", () => {
+    const thin = estimateFilamentGrams(cube(), {
+      density: 1.24,
+      infillPercent: 15,
+      wallThicknessMm: 0.4,
+    })
+    const standard = estimateFilamentGrams(cube(), {
+      density: 1.24,
+      infillPercent: 15,
+      wallThicknessMm: 1.2,
+    })
+    expect(thin.extrudedVolumeCm3).toBeLessThan(standard.extrudedVolumeCm3)
+  })
+})
+
 describe("estimatePrintHours", () => {
   it("convertit le volume extrudé en heures via le débit", () => {
     // 0,762 cm³ = 762 mm³ ; à 10 mm³/s → 76,2 s ≈ 0,0212 h
     expect(estimatePrintHours(0.762)).toBeCloseTo(762 / 10 / 3600, 6)
+  })
+
+  it("avec un débit personnalisé de 5 mm³/s, la durée est doublée", () => {
+    const heures10 = estimatePrintHours(0.762, 10)
+    const heures5 = estimatePrintHours(0.762, 5)
+    expect(heures5).toBeCloseTo(heures10 * 2, 10)
+  })
+
+  it("retourne 0 pour un volume extrudé nul", () => {
+    expect(estimatePrintHours(0)).toBe(0)
+  })
+
+  it("est proportionnel au volume extrudé", () => {
+    const h1 = estimatePrintHours(1.0)
+    const h2 = estimatePrintHours(2.0)
+    expect(h2).toBeCloseTo(h1 * 2, 10)
   })
 })

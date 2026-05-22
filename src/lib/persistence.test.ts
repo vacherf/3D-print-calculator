@@ -180,4 +180,94 @@ describe("persistence", () => {
       expect(() => saveState(validState)).not.toThrow()
     })
   })
+
+  describe("loadState — cas limites supplémentaires", () => {
+    it("retourne null pour un tableau JSON au lieu d'un objet", () => {
+      storage._store.set(STORAGE_KEY, JSON.stringify([1, 2, 3]))
+      expect(loadState()).toBeNull()
+    })
+
+    it("retourne null pour une chaîne JSON simple (non objet)", () => {
+      storage._store.set(STORAGE_KEY, JSON.stringify("valeur"))
+      expect(loadState()).toBeNull()
+    })
+
+    it("retourne null pour un objet vide {}", () => {
+      storage._store.set(STORAGE_KEY, JSON.stringify({}))
+      expect(loadState()).toBeNull()
+    })
+
+    it("retourne null si filamentId est null", () => {
+      storage._store.set(
+        STORAGE_KEY,
+        JSON.stringify({ ...validState, filamentId: null }),
+      )
+      expect(loadState()).toBeNull()
+    })
+
+    it("retourne null si marginPercent est un flottant négatif", () => {
+      storage._store.set(
+        STORAGE_KEY,
+        JSON.stringify({ ...validState, marginPercent: -0.01 }),
+      )
+      expect(loadState()).toBeNull()
+    })
+
+    it("accepte marginPercent = 100 (marge maximale autorisée)", () => {
+      const s = { ...validState, marginPercent: 100 }
+      saveState(s)
+      expect(loadState()).toEqual(s)
+    })
+
+    it("accepte wastePercent = 100 (gâche maximale autorisée)", () => {
+      const s = { ...validState, wastePercent: 100 }
+      saveState(s)
+      expect(loadState()).toEqual(s)
+    })
+
+    it("accepte des valeurs décimales réalistes (prix au kWh)", () => {
+      const s = { ...validState, electricityPricePerKwh: 0.2065 }
+      saveState(s)
+      const loaded = loadState()
+      expect(loaded?.electricityPricePerKwh).toBeCloseTo(0.2065, 5)
+    })
+
+    it("retourne null si printerPowerW est 0", () => {
+      storage._store.set(
+        STORAGE_KEY,
+        JSON.stringify({ ...validState, printerPowerW: 0 }),
+      )
+      expect(loadState()).toBeNull()
+    })
+
+    it("retourne null si electricityPricePerKwh est 0", () => {
+      storage._store.set(
+        STORAGE_KEY,
+        JSON.stringify({ ...validState, electricityPricePerKwh: 0 }),
+      )
+      expect(loadState()).toBeNull()
+    })
+
+    it("retourne null si printHours est une valeur Infinity (sérialisée en null)", () => {
+      storage._store.set(
+        STORAGE_KEY,
+        JSON.stringify({ ...validState, printHours: null }),
+      )
+      expect(loadState()).toBeNull()
+    })
+  })
+
+  describe("aller-retour saveState / loadState — variantes d'imprimantes", () => {
+    it("persiste et relit l'imprimante « custom »", () => {
+      const s = { ...validState, printerId: "custom" as const }
+      saveState(s)
+      expect(loadState()).toEqual(s)
+    })
+
+    it("persiste et relit une imprimante Prusa", () => {
+      const s = { ...validState, printerId: "prusa-mk4s" as const }
+      saveState(s)
+      expect(loadState()).toEqual(s)
+    })
+  })
 })

@@ -84,6 +84,16 @@ describe("formatKwh", () => {
     expect(normaliserEspaces(formatKwh(1234.5, "en"))).toBe("1,234.5 kWh")
   })
 
+  it("formate selon de-DE (séparateur décimal virgule, milliers point)", () => {
+    expect(normaliserEspaces(formatKwh(1234.5, "de"))).toBe("1.234,5 kWh")
+  })
+
+  it("formate selon es-ES (termine par « kWh »)", () => {
+    const result = normaliserEspaces(formatKwh(1234.5, "es"))
+    expect(result.endsWith("kWh")).toBe(true)
+    expect(result).toContain(",5")
+  })
+
   it("utilise fr-FR par défaut", () => {
     expect(normaliserEspaces(formatKwh(1234.5))).toBe(
       normaliserEspaces(formatKwh(1234.5, "fr")),
@@ -104,5 +114,35 @@ describe("formatKwh", () => {
 
   it("remplace une valeur non finie par 0", () => {
     expect(normaliserEspaces(formatKwh(Number.NaN, "fr"))).toBe("0 kWh")
+  })
+
+  it("remplace Infinity par 0", () => {
+    expect(normaliserEspaces(formatKwh(Number.POSITIVE_INFINITY, "fr"))).toBe(
+      "0 kWh",
+    )
+  })
+
+  it("formate une valeur typique d'impression (0,36 kWh)", () => {
+    // 120 W × 3 h = 0,36 kWh
+    expect(normaliserEspaces(formatKwh(0.36, "fr"))).toBe("0,36 kWh")
+  })
+})
+
+describe("formatEuros — cas limites supplémentaires", () => {
+  it("formate un très grand montant en fr-FR", () => {
+    const result = normaliserEspaces(formatEuros(1000000, "fr"))
+    expect(result).toContain("1")
+    expect(result).toContain("€")
+    expect(result).toContain("000")
+  })
+
+  it("formate une valeur infime proche de zéro (< 0,005) → 0,00 €", () => {
+    expect(normaliserEspaces(formatEuros(0.001, "fr"))).toBe("0,00 €")
+  })
+
+  it("formate un montant typique d'impression (1,17 €)", () => {
+    // 50 g PLA + 3 h à 120 W (coût de base réaliste)
+    const result = normaliserEspaces(formatEuros(1.17, "fr"))
+    expect(result).toBe("1,17 €")
   })
 })
