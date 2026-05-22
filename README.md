@@ -33,6 +33,19 @@ l'électricité en France**. Construite avec **Vite + React + TypeScript** et
   `window.print()`. L'interface applicative est masquée ; un document structuré
   (paramètres + détail du coût + date de génération) s'affiche à la place,
   formaté A4 portrait en noir & blanc — exportable en PDF via le navigateur.
+- **Thème clair / sombre** : bascule dans l'en-tête, persistée dans le
+  `localStorage` (clé `print3d-ui:theme`). La préférence système
+  (`prefers-color-scheme`) est détectée au premier chargement si aucun choix
+  n'a encore été enregistré. L'impression reste invariablement en noir & blanc.
+- **Interface bilingue FR / EN** : sélecteur de langue dans l'en-tête, bascule
+  instantanée, persistée (clé `print3d-ui:lang`). Le formatage des montants
+  suit la locale active via `Intl.NumberFormat` (devise EUR invariante :
+  `1 234,56 €` en français, `€1,234.56` en anglais). Les langues espagnole et
+  allemande sont prévues (sprint 04).
+- **Robustesse** : un `ErrorBoundary` enveloppe toute l'application ; en cas
+  d'erreur JavaScript inattendue, un écran de repli traduit s'affiche à la
+  place d'un écran blanc, avec un bouton « Réessayer » (les données saisies
+  sont conservées dans le `localStorage`).
 
 ## Démarrage
 
@@ -50,17 +63,30 @@ npm run test:run  # tests unitaires (exécution unique)
 ```
 src/
 ├── App.tsx                  # Composition de la page
+├── main.tsx                 # Point d'entrée : I18nProvider > ErrorBoundary > App
 ├── components/
 │   ├── CalculatorForm.tsx   # Formulaire de saisie
 │   ├── CostSummary.tsx      # Récapitulatif chiffré (+ bouton Imprimer)
+│   ├── ErrorBoundary.tsx    # Filet de sécurité : écran de repli traduit si erreur JS
+│   ├── LanguageSelector.tsx # Sélecteur de langue (FR / EN)
 │   ├── PrintSummary.tsx     # Document réservé à l'impression (@media print)
 │   ├── StlImporter.tsx      # Import & analyse d'un fichier STL
 │   ├── FilamentSelector.tsx # Sélecteur de filament
 │   ├── PrinterSelector.tsx  # Sélecteur d'imprimante (par marque)
 │   ├── NumberField.tsx      # Champ numérique réutilisable
 │   └── ui/                  # Primitives shadcn/ui
+├── contexts/
+│   ├── I18nContext.tsx      # Fournisseur du contexte i18n (I18nProvider)
+│   ├── I18nContextObject.ts # Objet createContext séparé (règle ESLint react-refresh)
+│   └── i18n.ts              # Hook accesseur useI18nContext
 ├── hooks/
-│   └── useCalculator.ts     # État + dérivation du calcul
+│   ├── useCalculator.ts     # État + dérivation du calcul
+│   ├── useI18n.ts           # Langue active, dictionnaire t, setLocale
+│   └── useTheme.ts          # Thème clair/sombre, persistance, détection système
+├── locales/
+│   ├── index.ts             # Point d'entrée : types, SUPPORTED_LOCALES, helpers
+│   ├── fr.ts                # Traductions françaises (type Translations défini ici)
+│   └── en.ts                # Traductions anglaises
 └── lib/
     ├── calculator.ts        # Moteur de calcul (fonctions pures)
     ├── calculator.test.ts   # Tests du moteur de calcul
@@ -70,7 +96,7 @@ src/
     ├── filaments.ts         # Référentiel des filaments
     ├── persistence.ts       # Lecture/écriture localStorage (clé print3d-calc:v1)
     ├── printers.ts          # Référentiel des imprimantes
-    ├── format.ts            # Formatage (€, kWh) à la française
+    ├── format.ts            # Formatage (€, kWh) selon locale — devise EUR invariante
     └── utils.ts             # cn() (classes Tailwind)
 ```
 

@@ -63,3 +63,12 @@ Une story est `✅ Terminé` quand :
 ## Cadence
 
 Sprints de **2 semaines**. Chaque sprint a un **objectif** unique en tête de dossier (voir le `STORY-000` ou l'en-tête du premier fichier du sprint).
+
+## Clôture de sprint
+
+Quand toutes les stories d'un sprint sont `✅ Terminé`, la clôture se déroule ainsi :
+
+1. **Bilan** — le `product-owner` rédige le bilan détaillé dans le `SPRINT.md` (objectif, réalisé, reporté, faits marquants, enseignements, suite) et passe le sprint en `Clôturé` avec sa date.
+2. **Mise à jour de la doc** — l'agent `documentation` met la documentation en phase avec le code livré pendant le sprint (`README.md`, `CLAUDE.md`, `docs/`, JSDoc). **Cette étape est systématique à chaque fin de sprint**, même si aucune story ne semblait « documentaire » : nouvelles fonctionnalités, modules, commandes ou évolutions de périmètre doivent s'y refléter.
+
+> Cette double étape (bilan PO + synchro doc) fait partie intégrante de la clôture : un sprint n'est pas considéré clos tant que la doc n'a pas été passée en revue.

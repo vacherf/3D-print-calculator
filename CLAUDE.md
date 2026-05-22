@@ -4,10 +4,10 @@
 
 ## En une phrase
 
-Application web qui estime le **coût de revient d'une impression 3D** (filament + électricité, marché français), avec import d'un fichier STL pour préremplir la matière/durée et sélection de l'imprimante pour la puissance.
+Application web **bilingue (FR/EN)** qui estime le **coût de revient d'une impression 3D** (filament + électricité, marché français), avec import STL, sélection de l'imprimante, thème clair/sombre et interface robuste (ErrorBoundary).
 
 - **Cible** : hobbyiste / usage personnel. Utilisable en local (`npm run dev`) ou via l'URL GitHub Pages : **https://vacherf.github.io/3D-print-calculator/**
-- **Langue** : tout en **français** (UI, commentaires, docs). Marché France, devise EUR.
+- **Langue** : commentaires et docs en **français** ; UI en FR par défaut, basculable en EN. Devise EUR invariante.
 
 ## Stack
 
@@ -27,16 +27,21 @@ npm run lint       # ESLint (config flat eslint.config.js — opérationnel)
 
 Séparation nette des responsabilités :
 
-- **`src/lib/`** — logique métier **pure** (testable, sans React) : `calculator.ts` (moteur de coût), `stl.ts` (parseur + géométrie), `filaments.ts`, `printers.ts`, `electricity.ts`, `format.ts`, `persistence.ts` (lecture/écriture `localStorage`, clé versionnée `print3d-calc:v1`).
-- **`src/hooks/useCalculator.ts`** — état global de la saisie + dérivation du calcul.
-- **`src/components/`** — UI. `ui/` = primitives shadcn ; ne pas y mettre de logique métier.
+- **`src/lib/`** — logique métier **pure** (testable, sans React) : `calculator.ts` (moteur de coût), `stl.ts` (parseur + géométrie), `filaments.ts`, `printers.ts`, `electricity.ts`, `format.ts` (paramètre `locale` optionnel, devise EUR fixe), `persistence.ts` (lecture/écriture `localStorage`, clé versionnée `print3d-calc:v1`).
+- **`src/locales/`** — dictionnaires de traductions TypeScript (`fr.ts`, `en.ts`, `index.ts`). Pour ajouter une langue : créer le fichier implémentant `Translations` et l'enregistrer dans `SUPPORTED_LOCALES`.
+- **`src/contexts/`** — couche i18n React : `I18nContextObject.ts` (objet contexte), `I18nContext.tsx` (`I18nProvider`), `i18n.ts` (hook `useI18nContext`). Découpé en trois fichiers par contrainte ESLint `react-refresh/only-export-components`.
+- **`src/hooks/`** — `useCalculator.ts` (état global + dérivation du calcul), `useTheme.ts` (thème clair/sombre, clé `print3d-ui:theme`), `useI18n.ts` (langue active, dictionnaire `t`, clé `print3d-ui:lang`).
+- **`src/components/`** — UI. `ui/` = primitives shadcn ; ne pas y mettre de logique métier. `ErrorBoundary.tsx` = composant de classe + `ErrorFallback` fonctionnel (accès au contexte i18n). `LanguageSelector.tsx` = sélecteur compact FR/EN dans l'en-tête.
+- **`src/main.tsx`** — ordre d'imbrication : `I18nProvider` > `ErrorBoundary` > `App` (le provider doit être au-dessus pour que le fallback soit traduit).
 
 ## Conventions
 
 - Imports via l'alias **`@/`** (`@/lib/...`, `@/components/...`).
-- Libellés UI et commentaires en **français** ; formatage via `src/lib/format.ts` (€, kWh à la française).
+- Commentaires et docs en **français** ; libellés UI dans les dictionnaires `src/locales/` (FR = référence, EN = traduction). Formatage via `src/lib/format.ts` (€, kWh selon la locale active, devise EUR invariante).
 - Toute nouvelle règle de calcul va dans `src/lib/` sous forme de fonction pure.
-- Pas de dépendance lourde sans nécessité ; réutiliser l'existant (`NumberField`, `Select`, `Card`, `useCalculator`).
+- Tout nouveau libellé UI va dans `fr.ts` **et** `en.ts` simultanément (TypeScript vérifie l'exhaustivité).
+- Préférences UI (thème, langue) : clés `localStorage` dédiées `print3d-ui:*`, indépendantes de `print3d-calc:v1`.
+- Pas de dépendance lourde sans nécessité ; réutiliser l'existant (`NumberField`, `Select`, `Card`, `useCalculator`, `useI18nContext`).
 
 ## Modèle de calcul (résumé)
 

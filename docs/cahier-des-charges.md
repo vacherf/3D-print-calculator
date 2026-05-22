@@ -84,12 +84,14 @@ L'import STL renseigne masse + durée ; modifier le taux de remplissage recalcul
 | # | Exigence | Détail |
 |---|----------|--------|
 | ENF-1 | **100 % client** | Aucun backend ; tout le calcul se fait dans le navigateur. Fonctionne hors-ligne une fois la page chargée. |
-| ENF-2 | **Localisation** | Interface, textes et formatage en **français** ; devise **EUR** ; références marché **France**. |
+| ENF-2 | **Localisation** | Interface disponible en **français** (défaut) et **anglais** (bascule dans l'en-tête, persistée). Formatage selon la locale via `Intl.NumberFormat` ; devise **EUR** invariante ; références marché **France**. |
 | ENF-3 | **Simplicité** | Un seul écran, lisible, sans configuration. Pas de compte, pas d'analytics, pas de SEO requis (usage local). |
 | ENF-4 | **Réactivité** | Calcul instantané ; analyse STL fluide pour des fichiers courants (jusqu'à ~plusieurs centaines de milliers de triangles). |
 | ENF-5 | **Responsive** | Utilisable sur desktop et mobile. |
 | ENF-6 | **Qualité du code** | TypeScript strict, logique métier pure et isolée dans `src/lib/`, conventions du projet (voir `CLAUDE.md`). |
 | ENF-7 | **Transparence** | Les estimations approximatives (STL, puissances) sont signalées comme telles dans l'UI. |
+| ENF-8 | **Robustesse** | Un `ErrorBoundary` de classe React enveloppe l'application ; toute erreur JavaScript non capturée affiche un écran de repli traduit plutôt qu'un écran blanc. |
+| ENF-9 | **Confort visuel** | Bascule thème clair / sombre dans l'en-tête, persistée (`print3d-ui:theme`), avec détection initiale de `prefers-color-scheme`. L'impression reste en noir & blanc. |
 
 ## 6. Hypothèses & contraintes
 
@@ -103,7 +105,8 @@ L'import STL renseigne masse + durée ; modifier le taux de remplissage recalcul
 - Slicing réel, supports, multi-matériaux / multi-couleurs.
 - **Amortissement de l'imprimante et usure** (buse, plateau) — _backlog, priorité basse (orienté pro)._
 - **Multi-pièces / impression en lot** — _backlog, hors cible actuelle._
-- **Devises et tarifs internationaux** (i18n) — _backlog, priorité basse._
+- **Langues supplémentaires** (espagnol ES, allemand DE) — _planifiées en sprint 04 (STORY-009b) ; l'infrastructure i18n est en place._
+- **Devises autres qu'EUR** — _hors périmètre ; la devise est EUR invariante même en mode anglais._
 - Comptes utilisateurs, synchronisation cloud, historique de plusieurs estimations.
 - Génération de devis commercial avec branding (logo, mentions légales).
 
@@ -123,8 +126,9 @@ Process agile léger :
 
 - **Sprint 01** ✅ — Fiabiliser l'estimation d'entrée : import STL, sélection d'imprimante, configuration ESLint. Clôturé le 2026-05-22.
 - **Sprint 02** ✅ — Confort, restitution & accès : persistance de la saisie (`localStorage`), récapitulatif imprimable (`window.print()` + `@media print`), déploiement GitHub Pages. Clôturé le 2026-05-22. Application accessible sur https://vacherf.github.io/3D-print-calculator/
-- **Sprint 03 (éventuel)** — Qualité et robustesse : ErrorBoundary, tests unitaires sur `persistence.ts`, process bug/hotfix.
-- **Backlog** — paramètres STL avancés, bibliothèque de filaments personnalisée, thème clair/sombre, aperçu 3D… (voir `backlog/backlog.md`).
+- **Sprint 03** ✅ — Expérience et robustesse : `ErrorBoundary` (écran de repli FR/EN), thème clair/sombre (persisté, détection système), infrastructure i18n + interface FR/EN. Clôturé le 2026-05-22.
+- **Sprint 04 (en cours)** — Traductions espagnol (ES) et allemand (DE) — STORY-009b.
+- **Backlog** — paramètres STL avancés, bibliothèque de filaments personnalisée, aperçu 3D… (voir `backlog/backlog.md`).
 
 ## 10. Glossaire
 

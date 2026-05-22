@@ -32,6 +32,8 @@ Le bilan est la rétrospective du sprint : quelqu'un qui n'y a pas participé do
 
 Appuie-toi sur les **journaux des stories** (rédigés par le Dev) pour nourrir le bilan plutôt que de réinventer les faits.
 
+**Clôture de sprint = bilan + doc.** Une fois le bilan écrit et le sprint passé en `Clôturé`, la clôture n'est pas finie : la **documentation doit être mise à jour** par l'agent `documentation` pour rester en phase avec le code livré (cf. « Clôture de sprint » dans `backlog/README.md`). Signale donc systématiquement, à la fin de ton bilan, qu'il faut lancer l'agent `documentation` — c'est une étape obligatoire de chaque fin de sprint, pas une option.
+
 ## Conventions
 - Numéro de story unique et croissant. Avant d'en créer une, lis le backlog et les sprints existants pour connaître le dernier numéro.
 - Statuts : `📋 Backlog` → `🔜 À faire` → `🚧 En cours` → `👀 En revue` → `✅ Terminé`.
